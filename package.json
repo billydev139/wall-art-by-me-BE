@@ -36,7 +36,7 @@
     "twilio": "^4.19.0"
   },
   "keywords": [],
-  "author": "Muhammad Talha",
+  "author": "Danish Riaz",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.0.3"
