@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import public_route from "./src/routes/public.js";
+//import public_route from "./src/routes/public.js";
+import admin from "./src/routes/admin.js";
 import bodyparser from "body-parser";
 export const app = express();
 app.use(cors());
@@ -15,10 +16,6 @@ app.use(
   })
 );
 
-app.use("/public", public_route);
+//app.use("/public", public_route);
 
-
-
-
-
-
+app.use("/admin", admin);
