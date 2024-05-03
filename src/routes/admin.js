@@ -1,40 +1,145 @@
 import express from "express";
 const router = express.Router();
-import { addArt } from "../controllers/admin/admin.js";
+import {
+  addArt,
+  deleteArtById,
+  getArtById,
+  updateArtById,
+} from "../controllers/admin/admin.js";
 
+import { profileImg } from "../middleware/storage.js";
 /**
  *  @swagger
  *  tags:
- *    name: admin
+ *    name: Admin
+ *    description: APIs for managing art by admin
  */
 
 /**
  * @swagger
- * /admin/admin:
- *   post: 
- *     summary: This api is used to add the art by admin
+ * /admin/addArt:
+ *   post:
+ *     summary: Add art
  *     tags: [Admin]
- *     parameters:
- *     - in: path
- *       name: symbol
- *       type: string
- *     - in: path
- *       name: time_start
- *       type: string
- *     - in: path
- *       name: time_end
- *       type: string
- *     - in: query
- *       name: time_period
- *       type: string
- *     - in: query
- *       name: interval
- *       type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               imgURL:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               size:
+ *                 type: string
+ *               artist:
+ *                 type: string
+ *               description:
+ *                 type: string
  *     responses:
  *       200:
- *         description:
+ *         description: Art added successfully
+ *       500:
+ *         description: Internal Server Error
  */
 
-router.route("/coin/:id/:time_start/:time_end").get(addArt);
+/**
+ * @swagger
+ * /admin/getArt/{id}:
+ *   get:
+ *     summary: Get art by ID
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the art
+ *     responses:
+ *       200:
+ *         description: Art found
+ *       404:
+ *         description: Art not found
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /admin/deleteArt/{id}:
+ *   delete:
+ *     summary: Delete art by ID
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the art
+ *     responses:
+ *       200:
+ *         description: Art deleted successfully
+ *       404:
+ *         description: Art not found
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /admin/updateArt/{id}:
+ *   patch:
+ *     summary: Update art by ID
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the art
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               imgURL:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               size:
+ *                 type: string
+ *               artist:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Art updated successfully
+ *       404:
+ *         description: Art not found
+ *       500:
+ *         description: Internal Server Error
+ */
+
+//router.route("/addArt", profileImg).post(addArt);
+router.route("/addArt").post(profileImg, addArt);
+router.route("/getArt/:id").get(getArtById);
+router.route("/deleteArt/:id").delete(deleteArtById);
+router.route("/updateArt/:id").patch(updateArtById);
 
 export default router;
