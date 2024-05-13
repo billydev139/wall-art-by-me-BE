@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { getArtCollection } from "../controllers/public/public.js";
+import { getArtCollection, placeOrder } from "../controllers/public/public.js";
 
 /**
  *  @swagger
@@ -24,4 +24,6 @@ import { getArtCollection } from "../controllers/public/public.js";
 
 router.route("/getArtCollection").get(getArtCollection);
 
+
+router.route("/placeOrder").post(placeOrder);
 export default router;

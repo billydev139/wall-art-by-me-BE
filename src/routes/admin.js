@@ -5,6 +5,9 @@ import {
   deleteArtById,
   getArtById,
   updateArtById,
+  getOrders,
+  getOrder,
+  updateOrder,
 } from "../controllers/admin/admin.js";
 
 import { profileImg } from "../middleware/storage.js";
@@ -19,21 +22,22 @@ import { profileImg } from "../middleware/storage.js";
  * @swagger
  * /admin/addArt:
  *   post:
- *     summary: Add art
+ *     summary: Add art user this enum for orientation ["portrait", "square", "Landscape"],
  *     tags: [Admin]
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               name:
  *                 type: string
- *               category:
+ *               artisticStyle:
  *                 type: string
- *               imgURL:
+ *               image:
  *                 type: string
+ *                 format: binary
  *               price:
  *                 type: number
  *               size:
@@ -42,12 +46,18 @@ import { profileImg } from "../middleware/storage.js";
  *                 type: string
  *               description:
  *                 type: string
+ *               orientation:
+ *                 type: string
+ *           
+ *
  *     responses:
  *       200:
  *         description: Art added successfully
  *       500:
  *         description: Internal Server Error
  */
+
+router.route("/addArt").post(profileImg, addArt);
 
 /**
  * @swagger
@@ -70,6 +80,7 @@ import { profileImg } from "../middleware/storage.js";
  *       500:
  *         description: Internal Server Error
  */
+router.route("/getArt/:id").get(getArtById);
 
 /**
  * @swagger
@@ -93,6 +104,7 @@ import { profileImg } from "../middleware/storage.js";
  *         description: Internal Server Error
  */
 
+router.route("/deleteArt/:id").delete(deleteArtById);
 /**
  * @swagger
  * /admin/updateArt/{id}:
@@ -136,10 +148,19 @@ import { profileImg } from "../middleware/storage.js";
  *         description: Internal Server Error
  */
 
-//router.route("/addArt", profileImg).post(addArt);
-router.route("/addArt").post(profileImg, addArt);
-router.route("/getArt/:id").get(getArtById);
-router.route("/deleteArt/:id").delete(deleteArtById);
 router.route("/updateArt/:id").patch(updateArtById);
+
+
+
+// get order 
+router.route("/getOrders").get(getOrders);
+
+//get Single Order
+router.route("/getOrder/:id").get(getOrder);
+
+//update Order
+
+router.route("/updateOrder/:id").patch(updateOrder);
+
 
 export default router;

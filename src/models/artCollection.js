@@ -4,10 +4,24 @@ const artSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  category: {
+  aritisticStyle: {
     type: String,
     required: true,
   },
+
+  frameOption: 
+    {
+      price: {
+        type: Number,
+      },
+      size: {
+        type: String,
+      },
+      type: {
+        type: String,
+      },
+    },
+
   imgURL: {
     type: String,
     required: true,
@@ -20,6 +34,10 @@ const artSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  color: {
+    type: String,
+  },
+  category: {},
   artist: {
     type: String,
     required: true,
@@ -28,10 +46,14 @@ const artSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  orientation: {
+    type: String,
+    enum: ["portrait", "square", "Landscape"],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-export default mongoose.model("artCollection", artSchema);
+export default mongoose.model("artcollection", artSchema);

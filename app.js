@@ -4,6 +4,7 @@ import cors from "cors";
 import admin from "./src/routes/admin.js";
 import public_route from "./src/routes/public.js";
 import bodyparser from "body-parser";
+import ErrorHandler from "./src/middleware/errorHandler.js";
 export const app = express();
 app.use(cors());
 app.use(express.json());
@@ -21,3 +22,6 @@ app.use(
 
 app.use("/admin", admin);
 app.use("/public", public_route);
+
+// ERROR HANDLER MIDDLEWARE (Last middleware to use)
+app.use(ErrorHandler);
