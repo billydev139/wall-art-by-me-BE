@@ -11,7 +11,7 @@ export const getArtCollection = async (req, res, next) => {
   }
 };
 
-
+  
 // place order
 export const placeOrder = async (req, res) => {
   try {
