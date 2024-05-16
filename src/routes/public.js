@@ -2,8 +2,6 @@ import express from "express";
 const router = express.Router();
 import { getArtCollection, placeOrder } from "../controllers/public/public.js";
 
-// test email routes
-
 /**
  *  @swagger
  *  tags:
@@ -25,6 +23,7 @@ import { getArtCollection, placeOrder } from "../controllers/public/public.js";
  */
 
 router.route("/getArtCollection").get(getArtCollection);
+
 
 router.route("/placeOrder").post(placeOrder);
 export default router;

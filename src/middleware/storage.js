@@ -16,7 +16,7 @@ const fileType = (file, cb) => {
     cb(null, false);
   }
 };
-
+  
 export const profileImg = multer({
   storage: diskStorage({
     destination: (req, file, cb) => {

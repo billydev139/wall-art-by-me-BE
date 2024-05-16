@@ -9,7 +9,7 @@ import {
   getOrder,
   updateOrder,
 } from "../controllers/admin/admin.js";
-  
+
 import { profileImg } from "../middleware/storage.js";
 /**
  *  @swagger
@@ -48,7 +48,7 @@ import { profileImg } from "../middleware/storage.js";
  *                 type: string
  *               orientation:
  *                 type: string
- *           
+ *
  *
  *     responses:
  *       200:
@@ -150,17 +150,94 @@ router.route("/deleteArt/:id").delete(deleteArtById);
 
 router.route("/updateArt/:id").patch(updateArtById);
 
+// get orders
+/**
+ * @swagger
+ * /admin/getOrders/:
+ *   get:
+ *     summary: This api is used to get the all order in admin side.The orderStatus is ["Pending", "Shipped", "Delivered"]
+ *     tags: [Admin]
+ *     parameters:
+ *     - in: query
+ *       name: page
+ *       type: string
+ *     - in: query
+ *       name: orderStatus
+ *       type: string
+ *     - in: query
+ *       name: aritisticStyle
+ *       type: string
+ *     responses:
+ *       200:
+ *         description: Art found
+ *       404:
+ *         description: Art not found
+ *       500:
+ *         description: Internal Server Error
+ */
 
-
-// get order 
 router.route("/getOrders").get(getOrders);
+
+// get single order
+/**
+ * @swagger
+ * /admin/getOrder/{id}:
+ *   get:
+ *     summary: This api is used to get single order by id
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the order
+ *     
+ *     responses:
+ *       200:
+ *         description: Art found
+ *       404:
+ *         description: Art not found
+ *       500:
+ *         description: Internal Server Error
+ */
 
 //get Single Order
 router.route("/getOrder/:id").get(getOrder);
 
 //update Order
 
-router.route("/updateOrder/:id").patch(updateOrder);
+/**
+ * @swagger
+ * /admin/updateOrder/{id}:
+ *   patch:
+ *     summary: Update order status user this enum to update the status ["Pending", "Shipped", "Delivered"] by ID
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the art
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               orderStatus:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Art updated successfully
+ *       404:
+ *         description: Art not found
+ *       500:
+ *         description: Internal Server Error
+ */
 
+router.route("/updateOrder/:id").patch(updateOrder);
 
 export default router;
