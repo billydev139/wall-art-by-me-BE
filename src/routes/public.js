@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { getArtCollection, placeOrder } from "../controllers/public/public.js";
+import { getArtCollection, placeOrder,addTOCart } from "../controllers/public/public.js";
 import { isAuth } from "../middleware/auth.js";
 /**
  *  @swagger
@@ -105,4 +105,6 @@ router.route("/getArtCollection").get(getArtCollection);
  *           example: "Pending"
  */
 router.route("/placeOrder").post(isAuth, placeOrder);
+
+
 export default router;
