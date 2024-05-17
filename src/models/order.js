@@ -73,6 +73,10 @@ const orderSchema = mongoose.Schema({
     enum: ["Pending", "Shipped", "Delivered"],
     default: "Pending",
   },
+  userId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   createdAt: {
     type: Date,
     default: Date.now,

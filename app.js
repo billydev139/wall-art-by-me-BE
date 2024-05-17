@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
-//import public_route from "./src/routes/public.js";
 import admin from "./src/routes/admin.js";
 import public_route from "./src/routes/public.js";
+import auth from "./src/routes/auth.js";
+import user from "./src/routes/user.js";
 import bodyparser from "body-parser";
 import ErrorHandler from "./src/middleware/errorHandler.js";
 export const app = express();
@@ -18,10 +19,11 @@ app.use(
   })
 );
 
-//app.use("/public", public_route);
 
 app.use("/admin", admin);
 app.use("/public", public_route);
+app.use("/auth", auth);
+app.use("/user", user);
 
-// ERROR HANDLER MIDDLEWARE (Last middleware to use)
+
 app.use(ErrorHandler);

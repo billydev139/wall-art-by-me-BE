@@ -5,7 +5,7 @@ import Order from "../../models/order.js";
 export const addArt = async (req, res) => {
   try {
     let data = req.body;
-    let image = req;
+    console.log("🚀 ~ addArt ~ data:", data)
     let name = req.body.name;
     let art = await artCollection.find({ name: name });
     if (art.length > 0) {
@@ -14,7 +14,7 @@ export const addArt = async (req, res) => {
     const newArt = new artCollection({
       name: data.name,
       category: data.category,
-      imgURL: data.imgURL ? "null" : req.file.filename,
+      imgURL: req.file ? req.file.filename : "empty-avatar.png",
       price: data.price,
       size: data.size,
       artist: data.artist,
@@ -26,6 +26,7 @@ export const addArt = async (req, res) => {
     await newArt.save();
     return res.status(200).json({ message: "Art Saved successfully" });
   } catch (error) {
+    console.log("🚀 ~ addArt ~ error:", error);
     return res.status(500).json({ errorMessage: error.message });
   }
 };
@@ -96,39 +97,43 @@ export const getArtById = async (req, res) => {
 // getOrders api
 export const getOrders = async (req, res) => {
   try {
-    let { page,orderStatus,aritisticStyle, ...rest } = req.query;
+    let { page, orderStatus, aritisticStyle, ...rest } = req.query;
 
     let query = { ...rest };
     if (orderStatus !== undefined) {
-        query.orderStatus = orderStatus;
+      query.orderStatus = orderStatus;
     }
-    
+
     if (aritisticStyle !== undefined) {
-       {items:{$elemMatch:{aritisticStyle:aritisticStyle}}}
-    } 
+      {
+        items: {
+          $elemMatch: {
+            aritisticStyle: aritisticStyle;
+          }
+        }
+      }
+    }
     let limit = 12;
     page?.length > 0 ? page : 1;
     let getOrders = await Order.find(query)
       .sort({ createdAt: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit);
-      
-      
-      if (getOrders.length < 0) {
-        return res.status(404).json({ message: "Orders not found" });
-      }
-     let count = await Order.find(query).countDocuments();
-     let content = {
-       pages: Math.ceil(count / limit),
-       total: count,
-       content: getOrders,
-     };
+
+    if (getOrders.length < 0) {
+      return res.status(404).json({ message: "Orders not found" });
+    }
+    let count = await Order.find(query).countDocuments();
+    let content = {
+      pages: Math.ceil(count / limit),
+      total: count,
+      content: getOrders,
+    };
     return res.status(200).json({ message: "Get All Orders", content });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }
 };
-
 
 //get Single Order
 
@@ -144,30 +149,23 @@ export const getOrder = async (req, res) => {
   }
 };
 
+// updateOrder
 
+export const updateOrder = async (req, res) => {
+  try {
+    const update = await Order.findByIdAndUpdate(
+      req.params.id,
+      { orderStatus: req.body.orderStatus },
+      { new: true }
+    );
 
-// updateOrder 
+    console.log("🚀 ~ updateOrder ~ Update:", update);
+    if (!update) {
+      return res.status(404).json({ message: "Order not found" });
+    }
 
-export const updateOrder = async(req, res) => {
-try {
-
-  const update = await Order.findByIdAndUpdate(
-    req.params.id, 
-    { orderStatus: req.body.orderStatus }, 
-    { new: true } 
-  );
-
-  console.log("🚀 ~ updateOrder ~ Update:", update);
-  if (!update) {
-    return res.status(404).json({ message: "Order not found" });
-  }
-
-      return res
-        .status(200)
-        .json({ message: `Order ${req.body.orderStatus}` });
-
-} catch (error) {
+    return res.status(200).json({ message: `Order ${req.body.orderStatus}` });
+  } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
-}
-
-}
+  }
+};

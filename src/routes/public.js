@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import { getArtCollection, placeOrder } from "../controllers/public/public.js";
-
+import { isAuth } from "../middleware/auth.js";
 /**
  *  @swagger
  *  tags:
@@ -104,5 +104,5 @@ router.route("/getArtCollection").get(getArtCollection);
  *           type: string
  *           example: "Pending"
  */
-router.route("/placeOrder").post(placeOrder);
+router.route("/placeOrder").post(isAuth, placeOrder);
 export default router;

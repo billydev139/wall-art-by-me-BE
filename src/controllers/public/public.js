@@ -22,7 +22,8 @@ export const placeOrder = async (req, res) => {
       customerEmail: req.body.customerEmail,
       shippingAddress: req.body.shippingAddress,
       orderStatus: req.body.orderStatus,
-      items :req.body.items
+      items :req.body.items,
+      userId : req.userId,
     })
    
     await order.save()

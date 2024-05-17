@@ -48,6 +48,17 @@ import { profileImg } from "../middleware/storage.js";
  *                 type: string
  *               orientation:
  *                 type: string
+ *               frameOption:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       price:
+ *                         type: string
+ *                       size:
+ *                         type: string
+ *                       type:
+ *                         type: string
  *
  *
  *     responses:
@@ -192,7 +203,7 @@ router.route("/getOrders").get(getOrders);
  *         schema:
  *           type: string
  *         description: ID of the order
- *     
+ *
  *     responses:
  *       200:
  *         description: Art found
