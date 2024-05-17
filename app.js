@@ -7,9 +7,9 @@ import user from "./src/routes/user.js";
 import bodyparser from "body-parser";
 import ErrorHandler from "./src/middleware/errorHandler.js";
 export const app = express();
-var corsOptions = {
-  origin: "*",
-  optionsSuccessStatus: 200, 
+const corsOptions = {
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
 };
 app.use(cors(corsOptions));
 app.use(express.json());
