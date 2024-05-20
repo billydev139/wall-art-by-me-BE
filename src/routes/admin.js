@@ -118,48 +118,174 @@ router.route("/getArt/:id").get(getArtById);
 router.route("/deleteArt/:id").delete(deleteArtById);
 /**
  * @swagger
- * /admin/updateArt/{id}:
- *   patch:
- *     summary: Update art by ID
- *     tags: [Admin]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: ID of the art
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               category:
- *                 type: string
- *               imgURL:
- *                 type: string
- *               price:
- *                 type: number
- *               size:
- *                 type: string
- *               artist:
- *                 type: string
- *               description:
- *                 type: string
- *     responses:
- *       200:
- *         description: Art updated successfully
- *       404:
- *         description: Art not found
- *       500:
- *         description: Internal Server Error
+ *swagger: "2.0"
+ *info:
+ *  title: Art Collection API
+ *  description: API documentation for managing an art collection.
+ *  version: 1.0.0
+ *paths:
+ *  /admin/updateArt/{id}:
+ *    put:
+ *      summary: Update an existing art piece
+ *      tags:
+ *        - Admin
+ *      description: Endpoint to update an existing art piece in the collection.
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          type: string
+ *          description: ID of the art
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *                  description: Name of the art piece
+ *                  example: "Starry Night"
+ *                aritisticStyle:
+ *                  type: string
+ *                  description: Artistic style of the art piece
+ *                  example: "Post-Impressionism"
+ *                frameOption:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      price:
+ *                        type: string
+ *                        description: Price of the frame option
+ *                        example: "50"
+ *                      size:
+ *                        type: string
+ *                        description: Size of the frame option
+ *                        example: "20x30"
+ *                      type:
+ *                        type: string
+ *                        description: Type of the frame option
+ *                        example: "Wood"
+ *                imgURL:
+ *                  type: string
+ *                  description: URL of the art piece image
+ *                  example: "http://example.com/image.jpg"
+ *                price:
+ *                  type: string
+ *                  description: Price of the art piece
+ *                  example: "200"
+ *                size:
+ *                  type: string
+ *                  description: Size of the art piece
+ *                  example: "24x36"
+ *                color:
+ *                  type: string
+ *                  description: Dominant color of the art piece
+ *                  example: "Blue"
+ *                artist:
+ *                  type: string
+ *                  description: Name of the artist
+ *                  example: "Vincent van Gogh"
+ *                description:
+ *                  type: string
+ *                  description: Description of the art piece
+ *                  example: "A depiction of a starry night over a quiet town."
+ *                orientation:
+ *                  type: string
+ *                  description: Orientation of the art piece
+ *                  enum: [portrait, square, landscape]
+ *                  example: "landscape"
+ *      responses:
+ *        '200':
+ *          description: Art piece updated successfully
+ *          schema:
+ *            type: object
+ *            properties:
+ *              _id:
+ *                type: string
+ *                description: ID of the updated art piece
+ *              name:
+ *                type: string
+ *              aritisticStyle:
+ *                type: string
+ *              frameOption:
+ *                type: array
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                    price:
+ *                      type: string
+ *                    size:
+ *                      type: string
+ *                    type:
+ *                      type: string
+ *              imgURL:
+ *                type: string
+ *              price:
+ *                type: string
+ *              size:
+ *                type: string
+ *              color:
+ *                type: string
+ *              artist:
+ *                type: string
+ *              description:
+ *                type: string
+ *              orientation:
+ *                type: string
+ *              createdAt:
+ *                type: string
+ *                format: date-time
+ *        '400':
+ *          description: Invalid input, object invalid
+ *        '404':
+ *          description: Art piece not found
+ *        '500':
+ *          description: Internal server error
+ *definitions:
+ *  Art:
+ *    type: object
+ *    properties:
+ *      _id:
+ *        type: string
+ *      name:
+ *        type: string
+ *      aritisticStyle:
+ *        type: string
+ *      frameOption:
+ *        type: array
+ *        items:
+ *          type: object
+ *          properties:
+ *            price:
+ *              type: string
+ *            size:
+ *              type: string
+ *            type:
+ *              type: string
+ *      imgURL:
+ *        type: string
+ *      price:
+ *        type: string
+ *      size:
+ *        type: string
+ *      color:
+ *        type: string
+ *      artist:
+ *        type: string
+ *      description:
+ *        type: string
+ *      orientation:
+ *        type: string
+ *        enum: [portrait, square, landscape]
+ *      createdAt:
+ *        type: string
+ *        format: date-time
  */
 
-router.route("/updateArt/:id").patch(updateArtById);
+router.route("/updateArtById/:id").patch(profileImg, updateArtById);
 
 // get orders
 /**

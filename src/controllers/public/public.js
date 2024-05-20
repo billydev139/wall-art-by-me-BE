@@ -55,9 +55,6 @@ export const placeOrder = async (req, res) => {
   }
 };
 
-
-
-
 // addTOCart
 export const addTOCart = async (req, res) => {
   try {
@@ -69,7 +66,7 @@ export const addTOCart = async (req, res) => {
       shippingAddress: req.body.shippingAddress,
       orderStatus: req.body.orderStatus,
       items: req.body.items,
-      userId: req.userId,
+      userId: req.user._id,
     });
 
     await cart.save();
@@ -79,3 +76,37 @@ export const addTOCart = async (req, res) => {
     return res.status(500).json({ errorMessage: error.message });
   }
 };
+
+// update Cart
+export const updateCart = async (req, res) => {
+  try {
+    let { item } = req.body;
+    console.log("🚀 ~ updateCart ~ item:", item)
+    let cart = await Cart.find({ userId: req.user.id });
+
+    cart.forEach((element) => {
+      element.items.push({
+        _id: "609d098ad2a4d806b8b13b5c", // Example ObjectId from the artcollection
+        aritisticStyle: "Impressionism",
+        name: "Danish Riaz",
+        frameSize: "Large",
+        imgURL: "https://example.com/image.jpg",
+        price: "1000",
+        size: "24x36",
+        color: "Blue",
+        artist: "Vincent van Gogh",
+        description: "Starry Night",
+        orientation: "portrait",
+      });
+      element.save();
+      console.log("🚀 ~ abc ~ cart:", element);
+    });
+  } catch (error) {
+     console.log("🚀 ~ updateCart ~ error:", error)
+     return res.status(500).json({ errorMessage: error.message });
+  }
+};
+// async function abc() {
+
+// }
+// abc();

@@ -1,6 +1,11 @@
 import express from "express";
 const router = express.Router();
-import { getArtCollection, placeOrder,addTOCart } from "../controllers/public/public.js";
+import {
+  getArtCollection,
+  placeOrder,
+  addTOCart,
+  updateCart,
+} from "../controllers/public/public.js";
 import { isAuth } from "../middleware/auth.js";
 /**
  *  @swagger
@@ -106,14 +111,13 @@ router.route("/getArtCollection").get(getArtCollection);
  */
 router.route("/placeOrder").post(isAuth, placeOrder);
 
-
 /**
  * @swagger
  * /public/addTOCart:
  * paths:
  *   /public/addTOCart:
  *     post:
- *       summary: This api is used to addTOCart 
+ *       summary: This api is used to addTOCart
  *       tags: [Public]
  *       requestBody:
  *         description: addTOCart details
@@ -188,5 +192,7 @@ router.route("/placeOrder").post(isAuth, placeOrder);
  *           example: "Pending"
  */
 router.route("/addTOCart").post(isAuth, addTOCart);
+
+router.route("/updateCart").post(isAuth, updateCart);
 
 export default router;

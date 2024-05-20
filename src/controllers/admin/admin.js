@@ -5,7 +5,7 @@ import Order from "../../models/order.js";
 export const addArt = async (req, res) => {
   try {
     let data = req.body;
-    console.log("🚀 ~ addArt ~ data:", data)
+    console.log("🚀 ~ addArt ~ data:", data);
     let name = req.body.name;
     let art = await artCollection.find({ name: name });
     if (art.length > 0) {
@@ -37,14 +37,28 @@ export const updateArtById = async (req, res) => {
     const { id } = req.params;
     const data = req.body;
 
-    const updatedArt = await artCollection.findByIdAndUpdate(id, data, {
-      new: true,
-    });
-
-    if (!updatedArt) {
+    // Find the art by ID
+    let art = await artCollection.findById(id);
+    if (!art) {
       return res.status(404).json({ message: "Art not found" });
     }
 
+    // Update the art properties
+    art.name = data.name || art.name;
+    art.aritisticStyle = data.aritisticStyle || art.aritisticStyle;
+    art.frameOption = data.frameOption || art.frameOption;
+    art.imgURL = req.file ? req.file.filename : data.imgURL || art.imgURL;
+    art.price = data.price || art.price;
+    art.size = data.size || art.size;
+    art.color = data.color || art.color;
+    art.artist = data.artist || art.artist;
+    art.description = data.description || art.description;
+    art.orientation = data.orientation || art.orientation;
+
+    // Save the updated art
+    const updatedArt = await art.save();
+
+    // Return the updated art piece
     return res
       .status(200)
       .json({ message: "Art updated successfully", updatedArt });
