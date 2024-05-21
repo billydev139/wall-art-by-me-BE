@@ -3,7 +3,11 @@ import fs from "fs";
 import Order from "../../models/order.js";
 // addArtCollection
 export const addArt = async (req, res) => {
+  console.log("🚀 ~ addArt ~ req:", req)
   try {
+    if(!req.file){
+        return res.status(400).json({ message: "image not found" });
+    }
     let data = req.body;
     let name = req.body.name;
     let art = await artCollection.find({ name: name });
@@ -64,14 +68,15 @@ export const deleteArtById = async (req, res) => {
     if (!deletedArt) {
       return res.status(404).json({ message: "Art not found" });
     }
-    // const imagePath = `../../../public/artCollection/${deletedArt.imgURL}`;
-    // fs.unlink(imagePath, (err) => {
-    //   if (err) {
-    //     console.error("Error deleting image file:", err);
-    //   } else {
-    //     console.log("Image file deleted successfully");
-    //   }
-    // });
+    const imagePath = `../../../public/artCollection/${deletedArt.imgURL}`;
+    fs.unlink(imagePath, (err) => {
+      console.log("🚀 ~ deleteArtById ~ imagePath:", imagePath)
+      if (err) {
+        console.error("Error deleting image file:", err);
+      } else {
+        console.log("Image file deleted successfully");
+      }
+    });
     return res.status(200).json({ message: "Art deleted successfully" });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
