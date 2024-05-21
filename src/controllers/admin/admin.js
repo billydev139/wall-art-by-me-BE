@@ -5,28 +5,19 @@ import Order from "../../models/order.js";
 export const addArt = async (req, res) => {
   try {
     let data = req.body;
-    console.log("🚀 ~ addArt ~ data:", data);
     let name = req.body.name;
     let art = await artCollection.find({ name: name });
     if (art.length > 0) {
       return res.status(400).json({ message: "Art Already Exists" });
     }
     const newArt = new artCollection({
-      name: data.name,
-      category: data.category,
-      imgURL: req.file ? req.file.filename : "empty-avatar.png",
-      price: data.price,
-      size: data.size,
-      artist: data.artist,
-      aritisticStyle: data.aritisticStyle,
-      orientation: data.orientation,
-      description: data.description,
-      frameOption: data.frameOption,
+      ...req.body,
+      imgURL: req.file.filename,
     });
     await newArt.save();
     return res.status(200).json({ message: "Art Saved successfully" });
   } catch (error) {
-    console.log("🚀 ~ addArt ~ error:", error);
+  
     return res.status(500).json({ errorMessage: error.message });
   }
 };
@@ -43,17 +34,13 @@ export const updateArtById = async (req, res) => {
       return res.status(404).json({ message: "Art not found" });
     }
 
-    // Update the art properties
-    art.name = data.name || art.name;
-    art.aritisticStyle = data.aritisticStyle || art.aritisticStyle;
-    art.frameOption = data.frameOption || art.frameOption;
-    art.imgURL = req.file ? req.file.filename : data.imgURL || art.imgURL;
-    art.price = data.price || art.price;
-    art.size = data.size || art.size;
-    art.color = data.color || art.color;
-    art.artist = data.artist || art.artist;
-    art.description = data.description || art.description;
-    art.orientation = data.orientation || art.orientation;
+    const updatedData = {
+      ...art.toObject(),
+      ...data,
+      imgURL: req.file ? req.file.filename : art.imgURL,
+    };
+
+    Object.assign(art, updatedData);
 
     // Save the updated art
     const updatedArt = await art.save();
