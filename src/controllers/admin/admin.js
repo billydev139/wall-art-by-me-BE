@@ -1,14 +1,21 @@
 import artCollection from "../../models/artCollection.js";
 import fs from "fs";
 import Order from "../../models/order.js";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+let publicPath = join(__dirname,"../../../public/artCollection");
+
+
+
 // addArtCollection
 export const addArt = async (req, res) => {
-  console.log("🚀 ~ addArt ~ req:", req)
+  console.log("🚀 ~ addArt ~ req:", req);
   try {
-    if(!req.file){
-        return res.status(400).json({ message: "image not found" });
+    if (!req.file) {
+      return res.status(400).json({ message: "image not found" });
     }
-    let data = req.body;
     let name = req.body.name;
     let art = await artCollection.find({ name: name });
     if (art.length > 0) {
@@ -21,7 +28,6 @@ export const addArt = async (req, res) => {
     await newArt.save();
     return res.status(200).json({ message: "Art Saved successfully" });
   } catch (error) {
-  
     return res.status(500).json({ errorMessage: error.message });
   }
 };
@@ -68,9 +74,9 @@ export const deleteArtById = async (req, res) => {
     if (!deletedArt) {
       return res.status(404).json({ message: "Art not found" });
     }
-    const imagePath = `../../../public/artCollection/${deletedArt.imgURL}`;
+    const imagePath = `${publicPath}/${deletedArt.imgURL}`;
     fs.unlink(imagePath, (err) => {
-      console.log("🚀 ~ deleteArtById ~ imagePath:", imagePath)
+      console.log("🚀 ~ deleteArtById ~ imagePath:", imagePath);
       if (err) {
         console.error("Error deleting image file:", err);
       } else {

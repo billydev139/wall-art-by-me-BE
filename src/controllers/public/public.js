@@ -37,14 +37,8 @@ export const getArtCollection = async (req, res, next) => {
 export const placeOrder = async (req, res) => {
   try {
     let order = new Order({
-      quantity: req.body.quantity,
-      totalPrice: req.body.totalPrice,
-      customerName: req.body.customerName,
-      customerEmail: req.body.customerEmail,
-      shippingAddress: req.body.shippingAddress,
-      orderStatus: req.body.orderStatus,
-      items: req.body.items,
-      userId: req.userId,
+      ...req.body,
+      userId:req.user.id,
     });
 
     await order.save();
@@ -106,7 +100,4 @@ export const updateCart = async (req, res) => {
      return res.status(500).json({ errorMessage: error.message });
   }
 };
-// async function abc() {
 
-// }
-// abc();

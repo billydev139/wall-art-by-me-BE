@@ -51,16 +51,19 @@ router.route("/getArtCollection").get(getArtCollection);
  *           description: Invalid input
  * components:
  *   schemas:
- *     Art:
+ *     items:
  *       type: object
  *       properties:
  *         _id:
  *           type: string
  *           example: "609d098ad2a4d806b8b13b5c"
  *           description: Example ObjectId from the art collection
- *         artisticStyle:
+ *         aritisticStyle:
  *           type: string
  *           example: "Impressionism"
+ *         name:
+ *           type: string
+ *           example: "nigth star"
  *         frameSize:
  *           type: string
  *           example: "Large"
@@ -88,7 +91,7 @@ router.route("/getArtCollection").get(getArtCollection);
  *     Order:
  *       type: object
  *       properties:
- *         art:
+ *         items:
  *           $ref: '#/components/schemas/Art'
  *         quantity:
  *           type: integer
