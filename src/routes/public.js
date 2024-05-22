@@ -112,7 +112,7 @@ router.route("/getArtCollection").get(getArtCollection);
  *           type: string
  *           example: "Pending"
  */
-router.route("/placeOrder").post(isAuth, placeOrder);
+router.route("/placeOrder").post( placeOrder);
 
 /**
  * @swagger

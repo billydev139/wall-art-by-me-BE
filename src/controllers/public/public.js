@@ -2,6 +2,7 @@ import artCollection from "../../models/artCollection.js";
 import Cart from "../../models/cart.js";
 import Users from "../../models/auth.js";
 import Order from "../../models/order.js";
+import { get } from "mongoose";
 // get all the art collections
 export const getArtCollection = async (req, res, next) => {
   try {
@@ -37,15 +38,60 @@ export const getArtCollection = async (req, res, next) => {
 // place order
 export const placeOrder = async (req, res) => {
   try {
-    let order = new Order({
+    let subTotal = 0;
+    let quantity = 0;
+    const items = [];
+
+    // Use a for...of loop to handle asynchronous operations
+    for (const item of req.body.items) {
+      console.log("🚀 ~ item:", item.artCollection);
+      const id = item.artCollection;
+
+      // Find the art collection item by ID
+      const art = await artCollection.findById(id);
+      //console.log("🚀 ~ placeOrder ~ art:", art)
+      console.log("🚀 ~ art:", art.price);
+
+      // If the art collection item is not found, throw an error
+      if (!art) {
+        throw new Error(
+          `ArtCollection item with ID ${item.artCollection} not found`
+        );
+      }
+       console.log("item.quantity is ", item.quantity);    
+      // Calculate subtotal for the current item
+      subTotal += parseInt(art.price) * parseInt(item.quantity);
+      quantity += parseInt(item.quantity);
+  
+
+      // Add the processed item to the items array
+      items.push({
+        ...item,
+        art,
+      });
+    }
+
+    // Log the calculated subtotal
+    console.log("🚀 ~ subTotal:", subTotal);
+
+    // Create a new order with the processed items and subtotal
+    const order = new Order({
       ...req.body,
-      userId: req.user.id,
+      items,
+      totalPrice: subTotal,
+      quantity: quantity,
+      // userId: req.user.id,
     });
 
+    // Save the order to the database
     await order.save();
 
-    return res.status(200).json({ message: "Order Saved successfully" });
+    // Send a success response
+    return res
+      .status(200)
+      .json({ message: "Order saved successfully", totalPrice: subTotal });
   } catch (error) {
+    console.error("Error in placeOrder:", error.message);
     return res.status(500).json({ errorMessage: error.message });
   }
 };
@@ -60,9 +106,7 @@ export const addTOCart = async (req, res) => {
     let { items } = req.body;
     items.forEach((item) => {
       console.log("🚀 Cart items ", item);
-      // let id = item.art;
-      // let art = artCollection.findById(id);
-      // console.log("🚀 ~ addTOCart ~ art:", art);
+  
     });
     let cart = new Cart({
       ...req.body,

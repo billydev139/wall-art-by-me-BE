@@ -3,11 +3,15 @@ import mongoose from "mongoose";
 const orderSchema = mongoose.Schema({
   items: [
     {
-      art: {
+      artCollection: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "artcollection",
       },
-      name:{
+      quantity: {
+        type: String,
+        required: true,
+      },
+      name: {
         type: String,
         required: true,
       },
@@ -46,6 +50,10 @@ const orderSchema = mongoose.Schema({
         type: String,
         enum: ["portrait", "square", "Landscape"],
       },
+      specification: {
+        type: String,
+        required: true,
+      },
     },
   ],
   quantity: {
@@ -73,7 +81,7 @@ const orderSchema = mongoose.Schema({
     enum: ["Pending", "Shipped", "Delivered"],
     default: "Pending",
   },
-  userId:{
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
