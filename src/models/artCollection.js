@@ -17,7 +17,7 @@ const artSchema = mongoose.Schema({
       size: {
         type: String,
       },
-      type: {
+      material: {
         type: String,
       },
     },
@@ -25,9 +25,9 @@ const artSchema = mongoose.Schema({
 
   imgURLs: [
     {
-    type: String,
-    required: true,
-    }
+      type: String,
+      required: true,
+    },
   ],
   price: {
     type: String,
@@ -37,9 +37,11 @@ const artSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  color:[ {
-    type: String,
-  }],
+  color: [
+    {
+      type: String,
+    },
+  ],
   artist: {
     type: String,
     required: true,
