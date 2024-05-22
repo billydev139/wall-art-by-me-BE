@@ -6,7 +6,7 @@ import path from "path";
 config();
 
 const fileType = (file, cb) => {
-  let allow = /jpeg|jpg|png|gif/;
+  let allow = /jpeg|jpg|png|svg|gif/;
   const isMatch = allow.test(path.extname(file.originalname).toLowerCase());
   const isMIME = allow.test(file.mimetype);
 
@@ -34,4 +34,4 @@ export const profileImg = multer({
   fileFilter: (req, file, cb) => {
     fileType(file, cb);
   },
-}).single("image");
+}).array("image", 10);

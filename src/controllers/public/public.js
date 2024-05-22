@@ -1,5 +1,6 @@
 import artCollection from "../../models/artCollection.js";
 import Cart from "../../models/cart.js";
+import Users from "../../models/auth.js";
 import Order from "../../models/order.js";
 // get all the art collections
 export const getArtCollection = async (req, res, next) => {
@@ -38,7 +39,7 @@ export const placeOrder = async (req, res) => {
   try {
     let order = new Order({
       ...req.body,
-      userId:req.user.id,
+      userId: req.user.id,
     });
 
     await order.save();
@@ -52,14 +53,19 @@ export const placeOrder = async (req, res) => {
 // addTOCart
 export const addTOCart = async (req, res) => {
   try {
+    let data = await Users.findById(req.user._id);
+    if (!data) {
+      return res.status(203).json({ message: "You must be logged in" });
+    }
+    let { items } = req.body;
+    items.forEach((item) => {
+      console.log("🚀 Cart items ", item);
+      // let id = item.art;
+      // let art = artCollection.findById(id);
+      // console.log("🚀 ~ addTOCart ~ art:", art);
+    });
     let cart = new Cart({
-      quantity: req.body.quantity,
-      totalPrice: req.body.totalPrice,
-      customerName: req.body.customerName,
-      customerEmail: req.body.customerEmail,
-      shippingAddress: req.body.shippingAddress,
-      orderStatus: req.body.orderStatus,
-      items: req.body.items,
+      ...req.body,
       userId: req.user._id,
     });
 
@@ -75,29 +81,15 @@ export const addTOCart = async (req, res) => {
 export const updateCart = async (req, res) => {
   try {
     let { item } = req.body;
-    console.log("🚀 ~ updateCart ~ item:", item)
-    let cart = await Cart.find({ userId: req.user.id });
+    let cart = await Cart.find({ userId: req.params.id });
 
     cart.forEach((element) => {
-      element.items.push({
-        _id: "609d098ad2a4d806b8b13b5c", // Example ObjectId from the artcollection
-        aritisticStyle: "Impressionism",
-        name: "Danish Riaz",
-        frameSize: "Large",
-        imgURL: "https://example.com/image.jpg",
-        price: "1000",
-        size: "24x36",
-        color: "Blue",
-        artist: "Vincent van Gogh",
-        description: "Starry Night",
-        orientation: "portrait",
-      });
+      element.items.push(item);
       element.save();
-      console.log("🚀 ~ abc ~ cart:", element);
     });
+    return res.status(200).json({ message: "Cart Update successfully" });
   } catch (error) {
-     console.log("🚀 ~ updateCart ~ error:", error)
-     return res.status(500).json({ errorMessage: error.message });
+    console.log("🚀 ~ updateCart ~ error:", error);
+    return res.status(500).json({ errorMessage: error.message });
   }
 };
-

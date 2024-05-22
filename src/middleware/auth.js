@@ -9,10 +9,12 @@ export const isAuth = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    
 
-    req.user = await Users.findById(decoded.id);
- 
+    let data = await Users.findById(decoded.id);
+    if (!data) {
+      return res.status(203).json({ message: "You must be logged in" });
+    }
+    req.user = data;
     next();
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });

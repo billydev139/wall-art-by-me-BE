@@ -196,6 +196,6 @@ router.route("/placeOrder").post(isAuth, placeOrder);
  */
 router.route("/addTOCart").post(isAuth, addTOCart);
 
-router.route("/updateCart").post(isAuth, updateCart);
+router.route("/updateCart/:id").post(isAuth, updateCart);
 
 export default router;

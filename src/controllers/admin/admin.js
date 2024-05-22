@@ -5,25 +5,26 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-let publicPath = join(__dirname,"../../../public/artCollection");
-
-
+let publicPath = join(__dirname, "../../../public/artCollection");
 
 // addArtCollection
 export const addArt = async (req, res) => {
-  console.log("🚀 ~ addArt ~ req:", req);
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "image not found" });
+    if (req.files.length===0) {
+      return res.status(400).json({ message: "Image Not Found" });
     }
     let name = req.body.name;
     let art = await artCollection.find({ name: name });
     if (art.length > 0) {
       return res.status(400).json({ message: "Art Already Exists" });
     }
+    let imgURLs = [];
+    req.files.forEach((element) => {
+      imgURLs.push(element.filename);
+    });
     const newArt = new artCollection({
       ...req.body,
-      imgURL: req.file.filename,
+      imgURLs: imgURLs,
     });
     await newArt.save();
     return res.status(200).json({ message: "Art Saved successfully" });
