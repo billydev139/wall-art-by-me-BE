@@ -14,12 +14,30 @@ import { isAuth } from "../middleware/auth.js";
  *    description: APIs for public access
  */
 
+
 /**
  * @swagger
  * /public/getArtCollection:
  *   get:
  *     summary: Get art collections
- *     tags: [Public]
+ *     tags: 
+ *       - Public
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: string
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: orderStatus
+ *         schema:
+ *           type: string
+ *         description: Filter by order status
+ *       - in: query
+ *         name: artisticStyle
+ *         schema:
+ *           type: string
+ *         description: Filter by artistic style
  *     responses:
  *       200:
  *         description: Successfully retrieved art collections
@@ -28,6 +46,7 @@ import { isAuth } from "../middleware/auth.js";
  */
 
 router.route("/getArtCollection").get(getArtCollection);
+
 
 /**
  * @swagger
@@ -112,7 +131,7 @@ router.route("/getArtCollection").get(getArtCollection);
  *           type: string
  *           example: "Pending"
  */
-router.route("/placeOrder").post( placeOrder);
+router.route("/placeOrder").post(placeOrder);
 
 /**
  * @swagger

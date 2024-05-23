@@ -4,7 +4,7 @@ const artSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  aritisticStyle: {
+  artisticStyle: {
     type: String,
     required: true,
   },
@@ -17,22 +17,28 @@ const artSchema = mongoose.Schema({
       size: {
         type: String,
       },
+    },
+  ],
+
+  posterFrame: [
+    {
+      price: {
+        type: String,
+      },
+      color: {
+        type: String,
+      },
       material: {
         type: String,
       },
     },
   ],
-
   imgURLs: [
     {
       type: String,
       required: true,
     },
   ],
-  price: {
-    type: String,
-    required: true,
-  },
   size: {
     type: String,
     required: true,
@@ -52,7 +58,7 @@ const artSchema = mongoose.Schema({
   },
   orientation: {
     type: String,
-    enum: ["portrait", "square", "Landscape"],
+    enum: ["Portrait", "Square", "Landscape"],
   },
   createdAt: {
     type: Date,

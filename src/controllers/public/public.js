@@ -6,12 +6,17 @@ import { get } from "mongoose";
 // get all the art collections
 export const getArtCollection = async (req, res, next) => {
   try {
-    let { page, aritisticStyle, ...rest } = req.query;
+    let { page, aritisticStyle,orientation,color, ...rest } = req.query;
     let query = { ...rest };
     if (aritisticStyle !== undefined) {
       query.aritisticStyle = aritisticStyle;
     }
-
+    if(color!== undefined) {
+      query.color = color;
+    }
+    if(orientation !== undefined) {
+      query.orientation = orientation;
+    }
     let limit = 12;
     page?.length > 0 ? page : 1;
     let getOrders = await artCollection
