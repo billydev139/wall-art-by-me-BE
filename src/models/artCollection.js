@@ -17,15 +17,15 @@ const artSchema = mongoose.Schema({
       size: {
         type: String,
       },
-      name:{
+      name: {
         type: String,
-      }
+      },
     },
   ],
-  frameExtras :{
-    type : String,
-    default :"Mounted",
-    required : true,
+  frameExtras: {
+    type: String,
+    default: "Mounted",
+    required: true,
   },
   posterFrame: [
     {
@@ -50,11 +50,9 @@ const artSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  color: [
-    {
-      type: String,
-    },
-  ],
+  color: {
+    type: String,
+  },
   artist: {
     type: String,
     required: true,
