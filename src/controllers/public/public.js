@@ -54,15 +54,19 @@ export const placeOrder = async (req, res) => {
       //console.log("🚀 ~ placeOrder ~ art:", art)
       let frameSize;
       let size;
-      if (item.posterFrame !== "NoFrame") {
+
+      console.log("THe item.posterFrame is ", item.posterFrameMaterial);
+      if (item.posterFrameMaterial !== "NoFrame") {
         art.posterFrame.forEach((frame) => {
           //console.log("🚀   frame Options", frame)
 
-          if (frame.frameSize === item.posterFrame) {
-            frameSize = frame.frameSize;
+          if (frame.material === item.posterFrameMaterial) {
+             frameSize = frame.frameSize;
             frameSize = frame.price;
           }
         });
+      }else{
+        frameSize = 0;
       }
 
       if (item.frameOption !== "NoSize") {
@@ -73,6 +77,8 @@ export const placeOrder = async (req, res) => {
             size = frame.price;
           }
         });
+      }else{
+         size = 0;
       }
 
       if (!art) {
