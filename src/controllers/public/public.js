@@ -3,18 +3,19 @@ import Cart from "../../models/cart.js";
 import Users from "../../models/auth.js";
 import Order from "../../models/order.js";
 import { get } from "mongoose";
+import { parse } from "dotenv";
 // get all the art collections
 export const getArtCollection = async (req, res, next) => {
   try {
-    let { page, aritisticStyle,orientation,color, ...rest } = req.query;
+    let { page, aritisticStyle, orientation, color, ...rest } = req.query;
     let query = { ...rest };
     if (aritisticStyle !== undefined) {
       query.aritisticStyle = aritisticStyle;
     }
-    if(color!== undefined) {
+    if (color !== undefined) {
       query.color = color;
     }
-    if(orientation !== undefined) {
+    if (orientation !== undefined) {
       query.orientation = orientation;
     }
     let limit = 12;
@@ -42,56 +43,66 @@ export const getArtCollection = async (req, res, next) => {
 
 // place order
 export const placeOrder = async (req, res) => {
+  //console.log("🚀 ~ placeOrder ~ req:", req.body);
   try {
     let subTotal = 0;
     let quantity = 0;
     const items = [];
-
-    // Use a for...of loop to handle asynchronous operations
-    for (const item of req.body.items) {
-      console.log("🚀 ~ item:", item.artCollection);
+    for (const item of req.body.cartItems) {
       const id = item.artCollection;
-
-      // Find the art collection item by ID
       const art = await artCollection.findById(id);
       //console.log("🚀 ~ placeOrder ~ art:", art)
-      console.log("🚀 ~ art:", art.price);
+      let frameSize;
+      let size;
+      if (item.posterFrame !== "NoFrame") {
+        art.posterFrame.forEach((frame) => {
+          //console.log("🚀   frame Options", frame)
 
-      // If the art collection item is not found, throw an error
+          if (frame.frameSize === item.posterFrame) {
+            frameSize = frame.frameSize;
+            frameSize = frame.price;
+          }
+        });
+      }
+
+      if (item.frameOption !== "NoSize") {
+        art.frameOption.forEach((frame) => {
+          console.log("🚀   frame Options", frame);
+
+          if (frame.size === item.size) {
+            size = frame.price;
+          }
+        });
+      }
+
       if (!art) {
         throw new Error(
           `ArtCollection item with ID ${item.artCollection} not found`
         );
       }
-       console.log("item.quantity is ", item.quantity);    
-      // Calculate subtotal for the current item
-      subTotal += parseInt(art.price) * parseInt(item.quantity);
+      console.log("The price of posterFrameColor option is ", frameSize);
+      console.log("The price of frame option is ", size);
+      subTotal +=
+        parseInt(size) * parseInt(item.quantity) + parseInt(frameSize);
       quantity += parseInt(item.quantity);
-  
 
-      // Add the processed item to the items array
       items.push({
         ...item,
         art,
       });
     }
 
-    // Log the calculated subtotal
     console.log("🚀 ~ subTotal:", subTotal);
-
-    // Create a new order with the processed items and subtotal
+  
     const order = new Order({
       ...req.body,
       items,
       totalPrice: subTotal,
       quantity: quantity,
-      // userId: req.user.id,
     });
 
-    // Save the order to the database
     await order.save();
 
-    // Send a success response
     return res
       .status(200)
       .json({ message: "Order saved successfully", totalPrice: subTotal });
@@ -111,7 +122,6 @@ export const addTOCart = async (req, res) => {
     let { items } = req.body;
     items.forEach((item) => {
       console.log("🚀 Cart items ", item);
-  
     });
     let cart = new Cart({
       ...req.body,

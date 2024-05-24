@@ -70,14 +70,14 @@ router.route("/getArtCollection").get(getArtCollection);
  *           description: Invalid input
  * components:
  *   schemas:
- *     items:
+ *     cartItems:
  *       type: object
  *       properties:
  *         _id:
  *           type: string
  *           example: "609d098ad2a4d806b8b13b5c"
  *           description: Example ObjectId from the art collection
- *         aritisticStyle:
+ *         artisticStyle:
  *           type: string
  *           example: "Impressionism"
  *         name:
@@ -107,7 +107,7 @@ router.route("/getArtCollection").get(getArtCollection);
  *         orientation:
  *           type: string
  *           example: "portrait"
- *     Order:
+ *     cartItems:
  *       type: object
  *       properties:
  *         items:

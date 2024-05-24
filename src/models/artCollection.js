@@ -12,18 +12,25 @@ const artSchema = mongoose.Schema({
   frameOption: [
     {
       price: {
-        type: String,
+        type: Number,
       },
       size: {
         type: String,
       },
+      name:{
+        type: String,
+      }
     },
   ],
-
+  frameExtras :{
+    type : String,
+    default :"Mounted",
+    required : true,
+  },
   posterFrame: [
     {
       price: {
-        type: String,
+        type: Number,
       },
       color: {
         type: String,

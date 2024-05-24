@@ -1,21 +1,21 @@
 import mongoose from "mongoose";
 
 const orderSchema = mongoose.Schema({
-  items: [
+  cartItems: [
     {
       artCollection: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "artcollection",
       },
       quantity: {
-        type: String,
+        type: Number,
         required: true,
       },
       name: {
         type: String,
         required: true,
       },
-      aritisticStyle: {
+      artisticStyle: {
         type: String,
         required: true,
       },
@@ -23,15 +23,23 @@ const orderSchema = mongoose.Schema({
         type: String,
         required: true,
       },
+      frameName: {
+        type: String,
+        required: true,
+      },
+      posterFrameColor: {
+        type: String,
+        required: true,
+      },
+      frameExtras: {
+        type: String,
+        required: true,
+      },
+      posterFrameMaterial: {
+        type: String,
+        required: true,
+      },
       imgURL: {
-        type: String,
-        required: true,
-      },
-      price: {
-        type: String,
-        required: true,
-      },
-      size: {
         type: String,
         required: true,
       },
