@@ -22,7 +22,7 @@ import { profileImg } from "../middleware/storage.js";
  * @swagger
  * /admin/addArt:
  *   post:
- *     summary:
+ *     summary: Add a new piece of art
  *     tags: [Admin]
  *     requestBody:
  *       required: true
@@ -73,7 +73,7 @@ import { profileImg } from "../middleware/storage.js";
  *                     color:
  *                       type: string
  *                     material:
- *                       type: string               
+ *                       type: string
  *     responses:
  *       200:
  *         description: Art added successfully

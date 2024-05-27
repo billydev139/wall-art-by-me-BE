@@ -107,9 +107,9 @@ router.route("/getArtCollection").get(getArtCollection);
  *         orientation:
  *           type: string
  *           example: "portrait"
- *     cartItems:
- *       type: object
- *       properties:
+ *         cartItems:
+ *           type: object
+ *           properties:
  *         items:
  *           $ref: '#/components/schemas/Art'
  *         quantity:

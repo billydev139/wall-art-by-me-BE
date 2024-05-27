@@ -9,8 +9,9 @@ let publicPath = join(__dirname, "../../../public/artCollection");
 
 // addArtCollection
 export const addArt = async (req, res) => {
+  console.log("🚀 ~ addArt ~ req:", req.body);
   try {
-    if (req.files.length===0) {
+    if (req.files.length === 0) {
       return res.status(400).json({ message: "Image Not Found" });
     }
     let name = req.body.name;
@@ -29,6 +30,7 @@ export const addArt = async (req, res) => {
     await newArt.save();
     return res.status(200).json({ message: "Art Saved successfully" });
   } catch (error) {
+    //console.log("🚀 ~ addArt ~ error:", error)
     return res.status(500).json({ errorMessage: error.message });
   }
 };
