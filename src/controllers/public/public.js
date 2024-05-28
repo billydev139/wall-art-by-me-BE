@@ -30,9 +30,7 @@ export const getArtCollection = async (req, res, next) => {
       .limit(limit)
       .skip((page - 1) * limit);
 
-    if (getOrders.length === 0) {
-      return res.status(404).json({ message: "Art not found" });
-    }
+    
 
     // Fetch distinct colors
     let distinctColors = await artCollection.distinct("color");
