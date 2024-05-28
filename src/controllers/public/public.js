@@ -5,10 +5,13 @@ import Order from "../../models/order.js";
 import { get } from "mongoose";
 import { parse } from "dotenv";
 // get all the art collections
+
 export const getArtCollection = async (req, res, next) => {
   try {
-    let { page,limit, aritisticStyle, orientation, color, ...rest } = req.query;
+    let { page, limit, aritisticStyle, orientation, color, ...rest } =
+      req.query;
     let query = { ...rest };
+
     if (aritisticStyle !== undefined) {
       query.aritisticStyle = aritisticStyle;
     }
@@ -18,32 +21,41 @@ export const getArtCollection = async (req, res, next) => {
     if (orientation !== undefined) {
       query.orientation = orientation;
     }
-     limit = limit ? parseInt(limit) : 12;
-    page?.length > 0 ? page : 1;
+
+    limit = limit ? parseInt(limit) : 12;
+    page = page ? parseInt(page) : 1;
+
     let getOrders = await artCollection
       .find(query)
-      .limit(limit * 1)
+      .limit(limit)
       .skip((page - 1) * limit);
 
-    if (getOrders.length < 0) {
+    if (getOrders.length === 0) {
       return res.status(404).json({ message: "Art not found" });
     }
 
-let data = await artCollection.find({}, { color: 1 });
-console.log("🚀 ~ getArtCollection ~ data:", data)
+    // Fetch distinct colors
+    let distinctColors = await artCollection.distinct("color");
+    let artisticStyles = await artCollection.distinct("artisticStyle");
 
-    let count = await artCollection.find(query).countDocuments();
+    let count = await artCollection.countDocuments(query);
     let content = {
       pages: Math.ceil(count / limit),
       total: count,
       content: getOrders,
     };
-    return res.status(200).json({ message: "Get Art Successfully", content });
+
+    return res.status(200).json({
+      message: "Get Art Successfully",
+      colors: distinctColors,
+      artisticStyles: artisticStyles,
+      content,
+    });
   } catch (error) {
     next(error);
-    //return res.status(500).json({ error: error.message });
   }
 };
+
 // place order
 export const placeOrder = async (req, res) => {
   //console.log("🚀 ~ placeOrder ~ req:", req.body);
@@ -64,11 +76,11 @@ export const placeOrder = async (req, res) => {
           //console.log("🚀   frame Options", frame)
 
           if (frame.material === item.posterFrameMaterial) {
-             frameSize = frame.frameSize;
+            frameSize = frame.frameSize;
             frameSize = frame.price;
           }
         });
-      }else{
+      } else {
         frameSize = 0;
       }
 
@@ -80,8 +92,8 @@ export const placeOrder = async (req, res) => {
             size = frame.price;
           }
         });
-      }else{
-         size = 0;
+      } else {
+        size = 0;
       }
 
       if (!art) {
@@ -102,7 +114,7 @@ export const placeOrder = async (req, res) => {
     }
 
     console.log("🚀 ~ subTotal:", subTotal);
-  
+
     const order = new Order({
       ...req.body,
       items,
