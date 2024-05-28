@@ -29,6 +29,16 @@ import { isAuth } from "../middleware/auth.js";
  *           type: string
  *         description: Page number for pagination
  *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: string
+ *         description: limit of doc you want to get
+ *       - in: query
+ *         name: color
+ *         schema:
+ *           type: string
+ *         description: Filter by color
+ *       - in: query
  *         name: orderStatus
  *         schema:
  *           type: string
@@ -46,6 +56,7 @@ import { isAuth } from "../middleware/auth.js";
  */
 
 router.route("/getArtCollection").get(getArtCollection);
+
 
 
 /**

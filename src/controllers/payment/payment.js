@@ -1,9 +1,8 @@
 import { createMollieClient } from "@mollie/api-client";
 
 const mollieClient = createMollieClient({
-  apiKey: "test_PnRTUtBpryN8FAFxFGPvMVrrv8qvC8",
+  apiKey: process.env.MOLLIE_SECRET_KEY,
 });
-//console.log("🚀 ~ mollieClient:", mollieClient)
 
 export const createPayment = async (req, res) => {
   try {

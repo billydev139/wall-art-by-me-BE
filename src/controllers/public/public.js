@@ -7,7 +7,7 @@ import { parse } from "dotenv";
 // get all the art collections
 export const getArtCollection = async (req, res, next) => {
   try {
-    let { page, aritisticStyle, orientation, color, ...rest } = req.query;
+    let { page,limit, aritisticStyle, orientation, color, ...rest } = req.query;
     let query = { ...rest };
     if (aritisticStyle !== undefined) {
       query.aritisticStyle = aritisticStyle;
@@ -18,7 +18,7 @@ export const getArtCollection = async (req, res, next) => {
     if (orientation !== undefined) {
       query.orientation = orientation;
     }
-    let limit = 12;
+     limit = limit ? parseInt(limit) : 12;
     page?.length > 0 ? page : 1;
     let getOrders = await artCollection
       .find(query)
@@ -28,6 +28,10 @@ export const getArtCollection = async (req, res, next) => {
     if (getOrders.length < 0) {
       return res.status(404).json({ message: "Art not found" });
     }
+
+let data = await artCollection.find({}, { color: 1 });
+console.log("🚀 ~ getArtCollection ~ data:", data)
+
     let count = await artCollection.find(query).countDocuments();
     let content = {
       pages: Math.ceil(count / limit),
@@ -40,7 +44,6 @@ export const getArtCollection = async (req, res, next) => {
     //return res.status(500).json({ error: error.message });
   }
 };
-
 // place order
 export const placeOrder = async (req, res) => {
   //console.log("🚀 ~ placeOrder ~ req:", req.body);
