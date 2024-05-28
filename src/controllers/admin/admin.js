@@ -77,21 +77,19 @@ export const deleteArtById = async (req, res) => {
     if (!deletedArt) {
       return res.status(404).json({ message: "Art not found" });
     }
-    const imagePath = `${publicPath}/${deletedArt.imgURL}`;
-    fs.unlink(imagePath, (err) => {
-      console.log("🚀 ~ deleteArtById ~ imagePath:", imagePath);
-      if (err) {
-        console.error("Error deleting image file:", err);
-      } else {
-        console.log("Image file deleted successfully");
-      }
+    deletedArt.imgURLs.forEach((imgURL) => {
+      let imagePath = `${publicPath}/${imgURL}`;
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          return res.status(404).json({ message: err.message });
+        }
+      });
     });
     return res.status(200).json({ message: "Art deleted successfully" });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }
 };
-
 // Get Art Collection by ID
 export const getArtById = async (req, res) => {
   try {
