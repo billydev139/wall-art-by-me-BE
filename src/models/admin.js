@@ -24,6 +24,7 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is required"],
   },
+  
 });
 
 const Admins = mongoose.model("admin", adminSchema);

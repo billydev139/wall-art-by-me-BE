@@ -8,12 +8,22 @@ import { parse } from "dotenv";
 
 export const getArtCollection = async (req, res, next) => {
   try {
-    let { page, limit, aritisticStyle, orientation, color, ...rest } =
-      req.query;
+    let {
+      page,
+      limit,
+      aritisticStyle,
+      orientation,
+      isFeatured,
+      color,
+      ...rest
+    } = req.query;
     let query = { ...rest };
 
     if (aritisticStyle !== undefined) {
       query.aritisticStyle = aritisticStyle;
+    }
+    if (isFeatured !== undefined) {
+      query.isFeatured = true;
     }
     if (color !== undefined) {
       query.color = color;
@@ -30,12 +40,17 @@ export const getArtCollection = async (req, res, next) => {
       .limit(limit)
       .skip((page - 1) * limit);
 
-    
-
     // Fetch distinct colors
     let distinctColors = await artCollection.distinct("color");
     let artisticStyles = await artCollection.distinct("artisticStyle");
+    let imgURLs = await artCollection.find({}, { imgURLs: 1 }, { _id: 0 });
+    let artisticStylesImage =[]
+        imgURLs.forEach(img => {
+          console.log("🚀 ~ getArtCollection ~ img:", img.imgURLs[0]);
 
+      artisticStylesImage.push(img.imgURLs[0]);
+        	
+        })
     let count = await artCollection.countDocuments(query);
     let content = {
       pages: Math.ceil(count / limit),
@@ -47,6 +62,7 @@ export const getArtCollection = async (req, res, next) => {
       message: "Get Art Successfully",
       colors: distinctColors,
       artisticStyles: artisticStyles,
+      imgURLs: artisticStylesImage,
       content,
     });
   } catch (error) {

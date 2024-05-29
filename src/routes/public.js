@@ -14,13 +14,12 @@ import { isAuth } from "../middleware/auth.js";
  *    description: APIs for public access
  */
 
-
 /**
  * @swagger
  * /public/getArtCollection:
  *   get:
  *     summary: Get art collections
- *     tags: 
+ *     tags:
  *       - Public
  *     parameters:
  *       - in: query
@@ -39,6 +38,11 @@ import { isAuth } from "../middleware/auth.js";
  *           type: string
  *         description: Filter by color
  *       - in: query
+ *         name: isFeatured
+ *         schema:
+ *           type: boolean
+ *         description: Filter by isFeatured
+ *       - in: query
  *         name: orderStatus
  *         schema:
  *           type: string
@@ -56,8 +60,6 @@ import { isAuth } from "../middleware/auth.js";
  */
 
 router.route("/getArtCollection").get(getArtCollection);
-
-
 
 /**
  * @swagger

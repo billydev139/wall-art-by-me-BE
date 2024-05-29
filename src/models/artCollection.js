@@ -65,6 +65,10 @@ const artSchema = mongoose.Schema({
     type: String,
     enum: ["Portrait", "Square", "Landscape"],
   },
+  isFeatured:{
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

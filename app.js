@@ -15,8 +15,6 @@ const corsOptions = {
   credentials: true, // If you need to include credentials
 };
 
-
-
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
@@ -28,7 +26,6 @@ app.use(
   })
 );
 
-
 app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
@@ -39,7 +36,6 @@ app.use("/admin", admin);
 app.use("/public", public_route);
 app.use("/auth", auth);
 app.use("/user", user);
-app.use("/payment",payment);
-
+app.use("/payment", payment);
 
 app.use(ErrorHandler);
