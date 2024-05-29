@@ -9,7 +9,6 @@ let publicPath = join(__dirname, "../../../public/artCollection");
 
 // addArtCollection
 export const addArt = async (req, res) => {
-  console.log("🚀 ~ addArt ~ req:", req.body);
   try {
     if (req.files.length === 0) {
       return res.status(400).json({ message: "Image Not Found" });
@@ -30,7 +29,6 @@ export const addArt = async (req, res) => {
     await newArt.save();
     return res.status(200).json({ message: "Art Saved successfully" });
   } catch (error) {
-    //console.log("🚀 ~ addArt ~ error:", error)
     return res.status(500).json({ errorMessage: error.message });
   }
 };
@@ -46,11 +44,14 @@ export const updateArtById = async (req, res) => {
     if (!art) {
       return res.status(404).json({ message: "Art not found" });
     }
-
+    let imgURLs = [];
+    req.files.forEach((element) => {
+      imgURLs.push(element.filename);
+    });
     const updatedData = {
       ...art.toObject(),
       ...data,
-      imgURL: req.file ? req.file.filename : art.imgURL,
+      imgURLs: imgURLs,
     };
 
     Object.assign(art, updatedData);
@@ -178,6 +179,42 @@ export const updateOrder = async (req, res) => {
     }
 
     return res.status(200).json({ message: `Order ${req.body.orderStatus}` });
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+// del single image
+
+export const delSingleImage = async (req, res) => {
+  try {
+    const { id, image } = req.params;
+
+    let art = await artCollection.findById(id);
+    let imageArray = art.imgURLs;
+
+    if (!imageArray.includes(image)) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+    if (!art) {
+      return res.status(404).json({ message: "Art not found" });
+    }
+    let imgURLs = art.imgURLs;
+    let imagePath = `${publicPath}/${image}`;
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        return res.status(404).json({ message: err.message });
+      }
+    });
+
+    let index = imgURLs.indexOf(image);
+
+    if (index > -1) {
+      imgURLs.splice(index, 1);
+    }
+    art.imgURLs = imgURLs;
+    await art.save();
+    return res.status(200).json({ message: "Image Deleted Successfully" });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }
