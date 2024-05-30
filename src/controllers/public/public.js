@@ -40,17 +40,37 @@ export const getArtCollection = async (req, res, next) => {
       .limit(limit)
       .skip((page - 1) * limit);
 
-    // Fetch distinct colors
+  
     let distinctColors = await artCollection.distinct("color");
     let artisticStyles = await artCollection.distinct("artisticStyle");
-    let imgURLs = await artCollection.find({}, { imgURLs: 1 }, { _id: 0 });
-    let artisticStylesImage =[]
-        imgURLs.forEach(img => {
-          console.log("🚀 ~ getArtCollection ~ img:", img.imgURLs[0]);
+const results = await artCollection.aggregate([
+  {
+    $group: {
+      _id: "$artisticStyle",
+      imgURLs: { $addToSet: "$imgURLs" },
+    },
+  },
+  {
+    $project: {
+      _id: 0,
+      artisticStyle: "$_id",
+      imgURLs: {
+        $reduce: {
+          input: "$imgURLs",
+          initialValue: [],
+          in: { $concatArrays: ["$$value", "$$this"] },
+        },
+      },
+    },
+  },
+  {
+    $project: {
+      artisticStyle: 1,
+      ImgURL: { $arrayElemAt: ["$imgURLs", 0] },
+    },
+  },
+]);
 
-      artisticStylesImage.push(img.imgURLs[0]);
-        	
-        })
     let count = await artCollection.countDocuments(query);
     let content = {
       pages: Math.ceil(count / limit),
@@ -62,7 +82,7 @@ export const getArtCollection = async (req, res, next) => {
       message: "Get Art Successfully",
       colors: distinctColors,
       artisticStyles: artisticStyles,
-      imgURLs: artisticStylesImage,
+      imgURLs: results,
       content,
     });
   } catch (error) {
