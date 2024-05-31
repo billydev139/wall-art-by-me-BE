@@ -5,6 +5,7 @@ import {
   placeOrder,
   addTOCart,
   updateCart,
+  imageGenerator,
 } from "../controllers/public/public.js";
 import { isAuth } from "../middleware/auth.js";
 /**
@@ -229,5 +230,43 @@ router.route("/placeOrder").post(placeOrder);
 router.route("/addTOCart").post(isAuth, addTOCart);
 
 router.route("/updateCart/:id").post(isAuth, updateCart);
+
+/**
+ * @swagger
+ * /public/imageGenerator:
+ *   post:
+ *     summary: Generate an image
+ *     tags: [Public]
+ *     description: Generate an image using OpenAI based on the provided prompt and size
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               size:
+ *                 type: string
+ *                 description: Size of the image
+ *                 example: 1024x1024
+ *               prompt:
+ *                 type: string
+ *                 description: Description of the image to generate
+ *                 example: A vibrant coral reef teeming with colorful fish
+ *     responses:
+ *       200:
+ *         description: Image generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url:
+ *                   type: string
+ *                   description: URL of the generated image
+ *       400:
+ *         description: Bad request
+ */
+router.route('/imageGenerator').post(imageGenerator);
 
 export default router;

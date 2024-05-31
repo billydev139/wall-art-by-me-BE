@@ -2,8 +2,7 @@ import artCollection from "../../models/artCollection.js";
 import Cart from "../../models/cart.js";
 import Users from "../../models/auth.js";
 import Order from "../../models/order.js";
-import { get } from "mongoose";
-import { parse } from "dotenv";
+import OpenAI from "openai";
 // get all the art collections
 
 export const getArtCollection = async (req, res, next) => {
@@ -40,36 +39,35 @@ export const getArtCollection = async (req, res, next) => {
       .limit(limit)
       .skip((page - 1) * limit);
 
-  
     let distinctColors = await artCollection.distinct("color");
     let artisticStyles = await artCollection.distinct("artisticStyle");
-const results = await artCollection.aggregate([
-  {
-    $group: {
-      _id: "$artisticStyle",
-      imgURLs: { $addToSet: "$imgURLs" },
-    },
-  },
-  {
-    $project: {
-      _id: 0,
-      artisticStyle: "$_id",
-      imgURLs: {
-        $reduce: {
-          input: "$imgURLs",
-          initialValue: [],
-          in: { $concatArrays: ["$$value", "$$this"] },
+    const results = await artCollection.aggregate([
+      {
+        $group: {
+          _id: "$artisticStyle",
+          imgURLs: { $addToSet: "$imgURLs" },
         },
       },
-    },
-  },
-  {
-    $project: {
-      artisticStyle: 1,
-      ImgURL: { $arrayElemAt: ["$imgURLs", 0] },
-    },
-  },
-]);
+      {
+        $project: {
+          _id: 0,
+          artisticStyle: "$_id",
+          imgURLs: {
+            $reduce: {
+              input: "$imgURLs",
+              initialValue: [],
+              in: { $concatArrays: ["$$value", "$$this"] },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          artisticStyle: 1,
+          ImgURL: { $arrayElemAt: ["$imgURLs", 0] },
+        },
+      },
+    ]);
 
     let count = await artCollection.countDocuments(query);
     let content = {
@@ -204,6 +202,40 @@ export const updateCart = async (req, res) => {
     return res.status(200).json({ message: "Cart Update successfully" });
   } catch (error) {
     console.log("🚀 ~ updateCart ~ error:", error);
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+// imageGenerator
+export const imageGenerator = async (req, res) => {
+  let { prompt,size } = req.body;
+  try {
+    const openai = new OpenAI({
+      apiKey: process.env.OPEN_API_KEY,
+    });
+    async function imageGenerator() {
+      const image = await openai.images.generate({
+        model: process.env.OPENAI_MODEL,
+        prompt: prompt,
+        n: parseInt(process.env.OPENAI_N),
+        size:size,
+        quality: process.env.OPENAI_QUALITY,
+        response_format: process.env.OPENAI_RESPONSE_FORMAT,
+        style: process.env.OPENAI_STYLE,
+      });
+
+      console.log(image.data);
+      let url = image.data[0].url
+         // console.log("🚀 ~ imageGenerator ~ url:", url)
+          return res
+            .status(200)
+            .json({ message: "image Generated  successfully", url: url });
+    }
+
+    imageGenerator();
+ 
+
+  } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }
 };

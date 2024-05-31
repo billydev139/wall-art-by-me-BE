@@ -225,56 +225,56 @@ router.route("/updateOrder/:id").patch(updateOrder);
 
 /**
  * @swagger
-* paths:
-*   /admin/delSingleImage/{id}/{image}:
-*     delete:
-*       summary: Delete a single image from the art collection
-*       tags: [Admin]
-*       description: Deletes a specified image from an art piece by its ID.
-*       parameters:
-*         - name: id
-*           in: path
-*           required: true
-*           schema:
-*             type: string
-*           description: The ID of the art piece.
-*         - name: image
-*           in: path
-*           required: true
-*           schema:
-*             type: string
-*           description: The filename of the image to be deleted.
-*       responses:
-*         '200':
-*           description: Image deleted successfully
-*           content:
-*             application/json:
-*               schema:
-*                 type: object
-*                 properties:
-*                   message:
-*                     type: string
-*                     example: Image Deleted Successfully
-*         '404':
-*           description: Not Found
-*           content:
-*             application/json:
-*               schema:
-*                 type: object
-*                 properties:
-*                   message:
-*                     type: string
-*                     example: Image not found
-*         '500':
-*           description: Internal Server Error
-*           content:
-*             application/json:
-*               schema:
-*                 type: object
-*                 properties:
-*                   errorMessage:
-*                     type: string
-*                     example: Internal server error message
+ * paths:
+ *   /admin/delSingleImage/{id}/{image}:
+ *     delete:
+ *       summary: Delete a single image from the art collection
+ *       tags: [Admin]
+ *       description: Deletes a specified image from an art piece by its ID.
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The ID of the art piece.
+ *         - name: image
+ *           in: path
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The filename of the image to be deleted.
+ *       responses:
+ *         '200':
+ *           description: Image deleted successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Image Deleted Successfully
+ *         '404':
+ *           description: Not Found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Image not found
+ *         '500':
+ *           description: Internal Server Error
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   errorMessage:
+ *                     type: string
+ *                     example: Internal server error message
  */
 router.route("/delSingleImage/:id/:image").delete(delSingleImage);
 export default router;
