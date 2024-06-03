@@ -3,6 +3,12 @@ import Cart from "../../models/cart.js";
 import Users from "../../models/auth.js";
 import Order from "../../models/order.js";
 import OpenAI from "openai";
+import imageDownloader from "image-downloader";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 // get all the art collections
 
 export const getArtCollection = async (req, res, next) => {
@@ -102,7 +108,6 @@ export const placeOrder = async (req, res) => {
       let frameSize;
       let size;
 
-      console.log("THe item.posterFrame is ", item.posterFrameMaterial);
       if (item.posterFrameMaterial !== "NoFrame") {
         art.posterFrame.forEach((frame) => {
           //console.log("🚀   frame Options", frame)
@@ -118,8 +123,6 @@ export const placeOrder = async (req, res) => {
 
       if (item.frameOption !== "NoSize") {
         art.frameOption.forEach((frame) => {
-          console.log("🚀   frame Options", frame);
-
           if (frame.size === item.size) {
             size = frame.price;
           }
@@ -133,8 +136,7 @@ export const placeOrder = async (req, res) => {
           `ArtCollection item with ID ${item.artCollection} not found`
         );
       }
-      console.log("The price of posterFrameColor option is ", frameSize);
-      console.log("The price of frame option is ", size);
+
       subTotal +=
         parseInt(size) * parseInt(item.quantity) + parseInt(frameSize);
       quantity += parseInt(item.quantity);
@@ -144,8 +146,6 @@ export const placeOrder = async (req, res) => {
         art,
       });
     }
-
-    console.log("🚀 ~ subTotal:", subTotal);
 
     const order = new Order({
       ...req.body,
@@ -160,7 +160,6 @@ export const placeOrder = async (req, res) => {
       .status(200)
       .json({ message: "Order saved successfully", totalPrice: subTotal });
   } catch (error) {
-    console.error("Error in placeOrder:", error.message);
     return res.status(500).json({ errorMessage: error.message });
   }
 };
@@ -173,9 +172,7 @@ export const addTOCart = async (req, res) => {
       return res.status(203).json({ message: "You must be logged in" });
     }
     let { items } = req.body;
-    items.forEach((item) => {
-      console.log("🚀 Cart items ", item);
-    });
+    items.forEach((item) => {});
     let cart = new Cart({
       ...req.body,
       userId: req.user._id,
@@ -201,14 +198,13 @@ export const updateCart = async (req, res) => {
     });
     return res.status(200).json({ message: "Cart Update successfully" });
   } catch (error) {
-    console.log("🚀 ~ updateCart ~ error:", error);
     return res.status(500).json({ errorMessage: error.message });
   }
 };
 
 // imageGenerator
 export const imageGenerator = async (req, res) => {
-  let { prompt,size } = req.body;
+  let { prompt, size } = req.body;
   try {
     const openai = new OpenAI({
       apiKey: process.env.OPEN_API_KEY,
@@ -218,24 +214,51 @@ export const imageGenerator = async (req, res) => {
         model: process.env.OPENAI_MODEL,
         prompt: prompt,
         n: parseInt(process.env.OPENAI_N),
-        size:size,
+        size: size,
         quality: process.env.OPENAI_QUALITY,
         response_format: process.env.OPENAI_RESPONSE_FORMAT,
         style: process.env.OPENAI_STYLE,
       });
 
-      console.log(image.data);
-      let url = image.data[0].url
-         // console.log("🚀 ~ imageGenerator ~ url:", url)
-          return res
-            .status(200)
-            .json({ message: "image Generated  successfully", url: url });
+      let url = image.data[0].url;
+      // console.log("🚀 ~ imageGenerator ~ url:", url)
+      return res
+        .status(200)
+        .json({ message: "image Generated  successfully", url: url });
     }
 
     imageGenerator();
- 
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+//downlodeAIImage
+// downloadAIImage
+export const downloadAIImage = async (req, res) => {
+  let { url, filename } = req.body;
+
+  try {
+    if (!filename) {
+      filename = path.basename(url);
+    }
+
+    const downloadDir = path.join(__dirname, "../../../public/");
+    const filePath = path.resolve(downloadDir, "downloads");
+    const options = {
+      url: url,
+      dest: filePath,
+    };
+
+    imageDownloader
+      .image(options)
+      .then(({ filename }) => {
+        console.log("Saved to", filename);
+      })
+      .catch((err) => console.error(err));
 
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }
 };
+

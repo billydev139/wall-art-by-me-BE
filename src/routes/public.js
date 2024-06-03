@@ -6,6 +6,7 @@ import {
   addTOCart,
   updateCart,
   imageGenerator,
+  downlodeAIImage,
 } from "../controllers/public/public.js";
 import { isAuth } from "../middleware/auth.js";
 /**
@@ -233,6 +234,40 @@ router.route("/updateCart/:id").post(isAuth, updateCart);
 
 /**
  * @swagger
+ * /public/downlodeAIImage:
+ *   post:
+ *     summary: downlodeAIImage
+ *     tags: [Public]
+ *     description: downlodeAIImage
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               url:
+ *                 type: string
+ *                 description: url
+ *                 example: https://oaidalleapiprodscus.blob
+ *     responses:
+ *       200:
+ *         description: Image generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url:
+ *                   type: string
+ *                   description: URL of the generated image
+ *       400:
+ *         description: Bad request
+ */
+router.route("/imageGenerator").post(imageGenerator);
+
+/**
+ * @swagger
  * /public/imageGenerator:
  *   post:
  *     summary: Generate an image
@@ -267,6 +302,7 @@ router.route("/updateCart/:id").post(isAuth, updateCart);
  *       400:
  *         description: Bad request
  */
-router.route('/imageGenerator').post(imageGenerator);
+
+router.route("/downlodeAIImage").post(downlodeAIImage);
 
 export default router;
