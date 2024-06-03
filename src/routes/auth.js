@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import { useLogin, userRegister } from "../controllers/auth/auth.js";
-
+import { isAdmin, isAuthorization } from "../../src/middleware/auth.js";
 /**
  * @swagger
  * paths:
@@ -99,6 +99,10 @@ router.route("/useLogin").post(useLogin);
 *                   type: string
 *                   example: Pa$$w0rd!
 *                   description: User's password
+*                 role:
+*                   type: string
+*                   example: Admin
+*                   description: User's role
 *       responses:
 *         '201':
 *           description: User registered successfully
@@ -131,5 +135,5 @@ router.route("/useLogin").post(useLogin);
 *                     type: string
 *                     example: Internal Server Error
 */
-router.route("/userRegister").post( userRegister);
+router.route("/userRegister").post(isAdmin, isAuthorization(["ADMIN"]), userRegister);
 export default router;

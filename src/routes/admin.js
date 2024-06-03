@@ -10,7 +10,7 @@ import {
   updateOrder,
   delSingleImage,
 } from "../controllers/admin/admin.js";
-
+import {isAdmin,isAuthorization} from "../../src/middleware/auth.js"
 import { profileImg } from "../middleware/storage.js";
 /**
  *  @swagger
@@ -82,7 +82,14 @@ import { profileImg } from "../middleware/storage.js";
  *         description: Internal Server Error
  */
 
-router.route("/addArt").post(profileImg, addArt);
+router
+  .route("/addArt")
+  .post(
+    isAdmin,
+    isAuthorization(["ADMIN", "CONTENT_WRITER"]),
+    profileImg,
+    addArt
+  );
 
 /**
  * @swagger
@@ -105,7 +112,9 @@ router.route("/addArt").post(profileImg, addArt);
  *       500:
  *         description: Internal Server Error
  */
-router.route("/getArt/:id").get(getArtById);
+router
+  .route("/getArt/:id")
+  .get(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), getArtById);
 
 /**
  * @swagger
@@ -129,9 +138,18 @@ router.route("/getArt/:id").get(getArtById);
  *         description: Internal Server Error
  */
 
-router.route("/deleteArt/:id").delete(deleteArtById);
+router
+  .route("/deleteArt/:id")
+  .delete(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), deleteArtById);
 
-router.route("/updateArtById/:id").patch(profileImg, updateArtById);
+router
+  .route("/updateArtById/:id")
+  .patch(
+    isAdmin,
+    isAuthorization(["ADMIN", "CONTENT_WRITER"]),
+    profileImg,
+    updateArtById
+  );
 
 // get orders
 /**
@@ -159,7 +177,9 @@ router.route("/updateArtById/:id").patch(profileImg, updateArtById);
  *         description: Internal Server Error
  */
 
-router.route("/getOrders").get(getOrders);
+router
+  .route("/getOrders")
+  .get(isAdmin, isAuthorization(["ADMIN", "ORDER_PICKER"]), getOrders);
 
 // get single order
 /**
@@ -186,7 +206,7 @@ router.route("/getOrders").get(getOrders);
  */
 
 //get Single Order
-router.route("/getOrder/:id").get(getOrder);
+router.route("/getOrder/:id").get(isAdmin, isAuthorization(["ADMIN", "ORDER_PICKER"]),getOrder);
 
 //update Order
 
@@ -221,7 +241,7 @@ router.route("/getOrder/:id").get(getOrder);
  *         description: Internal Server Error
  */
 
-router.route("/updateOrder/:id").patch(updateOrder);
+router.route("/updateOrder/:id").patch(isAdmin, isAuthorization(["ADMIN", "ORDER_PICKER"]),updateOrder);
 
 /**
  * @swagger
@@ -276,5 +296,11 @@ router.route("/updateOrder/:id").patch(updateOrder);
  *                     type: string
  *                     example: Internal server error message
  */
-router.route("/delSingleImage/:id/:image").delete(delSingleImage);
+router
+  .route("/delSingleImage/:id/:image")
+  .delete(
+    isAdmin,
+    isAuthorization(["ADMIN", "CONTENT_WRITER"]),
+    delSingleImage
+  );
 export default router;

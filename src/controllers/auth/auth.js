@@ -1,48 +1,43 @@
-import Users from "../../models/auth.js";
+import Admins from "../../models/admin.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import {sendToken} from "../../middleware/auth.js"
 
 
 export const useLogin = async (req, res) => {
   try {
     let { email, password } = req.body;
-    if ( !email || !password) {
-      return res.status(203).json({ error: "Email and Password are Required" });
+
+    const regexEmail = /^\S+@\S+\.\S+$/;
+
+    email = email.toLowerCase();
+
+    if (!regexEmail.test(email)) {
+      return res.status(404).json({ message: "Enter Valid E-mail" });
     }
-     email = email.toLowerCase();
-    const user = await Users.findOne({ email }).select("+password");
 
-    if (!user) {
-       return res.status(203).json({ error: "User Not Exist!" });
+    const user = await Admins.findOne({ email }).select("+password");
+    console.log("🚀 ~ useLogin ~ user:", user)
+    if (!user || user.isDelete) {
+      return res.status(404).json({ message: "invalid email & password" });
     }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
+    const isMatch = await user.isMatchPassword(password);
     if (!isMatch) {
-          return res.status(203).json({ error: "Invalid Email & Password" });
+      return res.status(404).json({ message: "invalid email & password" });
     }
 
-    // Generate JWT
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "1000h",
-    });
-
-    return res.status(200).json({
-      success: true,
-      message: "User logged in successfully",
-      token,
-    });
+    return sendToken(res, user, "Login Success");
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(504).json({ message: error.message });
   }
 };
 
-
 export const userRegister = async (req, res) => {
   try {
-    let { username, email, phone, password } = req.body;
+    console.log(req.body);
+    let { username, email, phone, password, role } = req.body;
 
-    if (!username || !email || !phone || !password) {
+    if (!username || !email || !phone || !password || !role) {
       return res.status(203).json({ error: "All fields are required" });
     }
     const regexEmail = /^\S+@\S+\.\S+$/;
@@ -52,8 +47,8 @@ export const userRegister = async (req, res) => {
     if (!regexEmail.test(email)) {
       return res.status(203).json({ error: "Enter Valid E-mail" });
     }
-    const checkEmail = await Users.findOne({ email });
-    const checkPhone = await Users.findOne({ phone });
+    const checkEmail = await Admins.findOne({ email });
+    const checkPhone = await Admins.findOne({ phone });
 
     if (checkEmail) {
       return res.status(203).json({ error: "Email Already exists" });
@@ -67,10 +62,10 @@ export const userRegister = async (req, res) => {
 
     password = hashPassword;
     // Create a new user
-    const newUser = new Users({ username, email,phone, password });
+    const newUser = new Admins({ username, email, phone, password, role });
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: "User Registered Successfully" });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }

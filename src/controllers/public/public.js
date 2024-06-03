@@ -233,7 +233,7 @@ export const imageGenerator = async (req, res) => {
   }
 };
 
-//downlodeAIImage
+
 // downloadAIImage
 export const downlodeAIImage = async (req, res) => {
   let { url, filename } = req.body;

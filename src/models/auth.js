@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is required"],
   },
+  isDelete: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Users = mongoose.model("User", userSchema);
