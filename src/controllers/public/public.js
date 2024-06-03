@@ -3,7 +3,7 @@ import Cart from "../../models/cart.js";
 import Users from "../../models/auth.js";
 import Order from "../../models/order.js";
 import OpenAI from "openai";
-import imageDownloader from "image-downloader";
+import imageDownloder from "image-downloader";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -235,7 +235,7 @@ export const imageGenerator = async (req, res) => {
 
 //downlodeAIImage
 // downloadAIImage
-export const downloadAIImage = async (req, res) => {
+export const downlodeAIImage = async (req, res) => {
   let { url, filename } = req.body;
 
   try {
@@ -244,21 +244,26 @@ export const downloadAIImage = async (req, res) => {
     }
 
     const downloadDir = path.join(__dirname, "../../../public/");
-    const filePath = path.resolve(downloadDir, "downloads");
+    const filePath = path.resolve(downloadDir, "artCollection");
     const options = {
       url: url,
       dest: filePath,
     };
 
-    imageDownloader
+    imageDownloder
       .image(options)
-      .then(({ filename }) => {
-        console.log("Saved to", filename);
+      .then(({ filename: savedFilename }) => {
+        const onlyFilename = path.basename(savedFilename);
+        console.log("Saved to", onlyFilename);
+        return res
+          .status(200)
+          .json({ message: "Image AddToCart Successfully", url: onlyFilename });
       })
-      .catch((err) => console.error(err));
-
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json({ errorMessage: err.message });
+      });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }
 };
-
