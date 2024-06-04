@@ -1,8 +1,7 @@
 import Admins from "../../models/admin.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import {sendToken} from "../../middleware/auth.js"
-
+import { sendToken } from "../../middleware/auth.js";
 
 export const adminLogin = async (req, res) => {
   try {
@@ -64,12 +63,11 @@ export const adminRegister = async (req, res) => {
   }
 };
 
-
 //logOut API
 export const logOut = async (req, res) => {
   try {
-    let admin = await Admins.findById(req.user.id)
-    if(!admin){
+    let admin = await Admins.findById(req.user.id);
+    if (!admin) {
       return res.status(404).json({ message: "Admin Not Found" });
     }
     admin.accessToken = "";

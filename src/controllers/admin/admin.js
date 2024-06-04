@@ -174,7 +174,6 @@ export const updateOrder = async (req, res) => {
       { new: true }
     );
 
-    
     if (!update) {
       return res.status(404).json({ message: "Order not found" });
     }
@@ -221,30 +220,28 @@ export const delSingleImage = async (req, res) => {
   }
 };
 
-
-// myTeam 
+// myTeam
 export const myTeam = async (req, res) => {
-    try {
-      if (!req.user) {
+  try {
+    if (!req.user) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+    const adminId = req.query.id;
+    let admin;
+    if (adminId) {
+      admin = await Admins.findById(adminId);
+      if (!admin) {
         return res.status(404).json({ message: "Admin not found" });
       }
-      const adminId = req.query.id;
-      let admin;
-      if (adminId) {
-        admin = await Admins.findById(adminId);
-        if (!admin) {
-          return res.status(404).json({ message: "Admin not found" });
-        }
-        return res.status(200).json({ message: "Admin found", admin });
-      } else {
-        admin = await Admins.find();
-        return res.status(200).json({ message: "All Team Members", admin });
-      }
-    } catch (error) {
-      return res.status(500).json({ errorMessage: error.message });
+      return res.status(200).json({ message: "Admin found", admin });
+    } else {
+      admin = await Admins.find();
+      return res.status(200).json({ message: "All Team Members", admin });
     }
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
 };
-
 
 // Delete an admin by ID
 export const deleteAdmin = async (req, res) => {
@@ -273,12 +270,12 @@ export const editAdmin = async (req, res) => {
       return res.status(404).json({ message: "Admin not found" });
     }
     const adminId = req.params.id;
-    if(!adminId) {
+    if (!adminId) {
       return res.status(404).json({ message: "ID not found" });
     }
     const updates = req.body;
-    let phone = await Admins.find({phone:req.body.phone})
-    if(phone.length > 0) {
+    let phone = await Admins.find({ phone: req.body.phone });
+    if (phone.length > 0) {
       return res.status(404).json({ message: "Phone number already exists" });
     }
     let email = await Admins.find({ email: req.body.email });
@@ -286,8 +283,9 @@ export const editAdmin = async (req, res) => {
       return res.status(404).json({ message: "Email Already Exists" });
     }
 
-    
-    const admin = await Admins.findByIdAndUpdate(adminId, updates, { new: true });
+    const admin = await Admins.findByIdAndUpdate(adminId, updates, {
+      new: true,
+    });
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }

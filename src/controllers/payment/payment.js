@@ -9,7 +9,7 @@ export const createPayment = async (req, res) => {
     const payment = await mollieClient.payments.create({
       amount: {
         currency: "EUR",
-        value: "10.00", // You must send the correct number of decimals, thus we enforce the use of strings
+        value: "10.00",
       },
       description: "My first payment",
       redirectUrl: "http://localhost:7070/successPayment",
@@ -18,22 +18,11 @@ export const createPayment = async (req, res) => {
         order_id: "12345",
       },
     });
-
-  
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 };
 
 export const successPayment = async (req, res) => {
-
   try {
-    // const payment = await mollieClient.payments.get(req.body.id);
     res.send("Payment Successfully");
-  } catch (error) {
-
-  }
+  } catch (error) {}
 };
-
-
-

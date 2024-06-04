@@ -74,12 +74,6 @@ export const AdminRegister = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
 export const addAdmin = async (req, res) => {
   try {
     let { first_name, last_name, email, password, role } = req.body;
@@ -153,7 +147,6 @@ export const addAdmin = async (req, res) => {
     sendToken(res, user, "Register Successfully");
   } catch (error) {
     return sendError(res, error);
-  
   }
 };
 

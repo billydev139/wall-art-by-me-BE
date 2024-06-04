@@ -17,7 +17,7 @@ const adminSchema = new mongoose.Schema({
     enum: ["ADMIN", "CONTENT_WRITER", "ORDER_PICKER"],
   },
   phone: {
-    type: String,
+    type: Number,
     required: [true, "Phone Number is required"],
     unique: true,
   },
