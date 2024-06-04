@@ -96,7 +96,6 @@ export const getArtCollection = async (req, res, next) => {
 
 // place order
 export const placeOrder = async (req, res) => {
-  //console.log("🚀 ~ placeOrder ~ req:", req.body);
   try {
     let subTotal = 0;
     let quantity = 0;
@@ -104,14 +103,11 @@ export const placeOrder = async (req, res) => {
     for (const item of req.body.cartItems) {
       const id = item.artCollection;
       const art = await artCollection.findById(id);
-      //console.log("🚀 ~ placeOrder ~ art:", art)
       let frameSize;
       let size;
 
       if (item.posterFrameMaterial !== "NoFrame") {
         art.posterFrame.forEach((frame) => {
-          //console.log("🚀   frame Options", frame)
-
           if (frame.material === item.posterFrameMaterial) {
             frameSize = frame.frameSize;
             frameSize = frame.price;
@@ -221,7 +217,6 @@ export const imageGenerator = async (req, res) => {
       });
 
       let url = image.data[0].url;
-      // console.log("🚀 ~ imageGenerator ~ url:", url)
       return res
         .status(200)
         .json({ message: "image Generated  successfully", url: url });
@@ -254,13 +249,12 @@ export const downlodeAIImage = async (req, res) => {
       .image(options)
       .then(({ filename: savedFilename }) => {
         const onlyFilename = path.basename(savedFilename);
-        console.log("Saved to", onlyFilename);
         return res
           .status(200)
           .json({ message: "Image AddToCart Successfully", url: onlyFilename });
       })
       .catch((err) => {
-        console.error(err);
+       
         return res.status(500).json({ errorMessage: err.message });
       });
   } catch (error) {

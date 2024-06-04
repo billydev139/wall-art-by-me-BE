@@ -21,6 +21,10 @@ const adminSchema = new mongoose.Schema({
     required: [true, "Phone Number is required"],
     unique: true,
   },
+  isDelete:{
+    type: Boolean,
+    default: false,
+  },
   accessToken: {
     type: String,
   },

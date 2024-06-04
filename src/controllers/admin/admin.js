@@ -3,6 +3,7 @@ import fs from "fs";
 import Order from "../../models/order.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import Admins from "../../models/admin.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 let publicPath = join(__dirname, "../../../public/artCollection");
@@ -173,7 +174,7 @@ export const updateOrder = async (req, res) => {
       { new: true }
     );
 
-    console.log("🚀 ~ updateOrder ~ Update:", update);
+    
     if (!update) {
       return res.status(404).json({ message: "Order not found" });
     }
@@ -215,6 +216,82 @@ export const delSingleImage = async (req, res) => {
     art.imgURLs = imgURLs;
     await art.save();
     return res.status(200).json({ message: "Image Deleted Successfully" });
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+
+// myTeam 
+export const myTeam = async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(404).json({ message: "Admin not found" });
+      }
+      const adminId = req.query.id;
+      let admin;
+      if (adminId) {
+        admin = await Admins.findById(adminId);
+        if (!admin) {
+          return res.status(404).json({ message: "Admin not found" });
+        }
+        return res.status(200).json({ message: "Admin found", admin });
+      } else {
+        admin = await Admins.find();
+        return res.status(200).json({ message: "All Team Members", admin });
+      }
+    } catch (error) {
+      return res.status(500).json({ errorMessage: error.message });
+    }
+};
+
+
+// Delete an admin by ID
+export const deleteAdmin = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+    const adminId = req.params.id;
+    if (!adminId) {
+      return res.status(404).json({ message: "ID not found" });
+    }
+    const admin = await Admins.findByIdAndDelete(adminId);
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+    return res.status(200).json({ message: "Admin deleted", admin });
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+// Edit an admin by ID
+export const editAdmin = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+    const adminId = req.params.id;
+    if(!adminId) {
+      return res.status(404).json({ message: "ID not found" });
+    }
+    const updates = req.body;
+    let phone = await Admins.find({phone:req.body.phone})
+    if(phone.length > 0) {
+      return res.status(404).json({ message: "Phone number already exists" });
+    }
+    let email = await Admins.find({ email: req.body.email });
+    if (email.length > 0) {
+      return res.status(404).json({ message: "Email Already Exists" });
+    }
+
+    
+    const admin = await Admins.findByIdAndUpdate(adminId, updates, { new: true });
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+    return res.status(200).json({ message: "Admin updated", admin });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }

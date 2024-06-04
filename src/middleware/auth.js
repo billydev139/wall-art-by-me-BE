@@ -34,6 +34,10 @@ export const isAdmin = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     req.user = await Admins.findById(decoded._id);
+    if (req.user.accessToken != token) {
+      return res.status(203).json({ message: "You must be logged in" });
+    }
+    
     if (token != req.user.accessToken){
       return res.status(203).json({ message: "You must be logged in" });
     }
@@ -69,7 +73,7 @@ export const sendToken = async (res, user, message) => {
     const content = {
       accessToken: token,
       customer: {
-        UserName: user?.UserName,
+        UserName: user?.username,
         PhoneNo: user?.PhoneNo,
         role: user?.role,
         id: user?.id,

@@ -28,10 +28,6 @@ app.use(
 
 app.use(cors(corsOptions));
 
-app.use((req, res, next) => {
-  console.log(`Request received: ${req.method} ${req.url}`);
-  next();
-});
 app.use("/admin", admin);
 app.use("/public", public_route);
 app.use("/auth", auth);

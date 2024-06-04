@@ -19,21 +19,19 @@ export const createPayment = async (req, res) => {
       },
     });
 
-    console.log(payment);
+  
   } catch (error) {
-    console.warn(error);
+    
   }
 };
 
 export const successPayment = async (req, res) => {
-  console.log("🚀 ~ successPayment ~ req:", req.body);
+
   try {
     // const payment = await mollieClient.payments.get(req.body.id);
     res.send("Payment Successfully");
-
-    console.log(payment);
   } catch (error) {
-    console.warn(error);
+
   }
 };
 

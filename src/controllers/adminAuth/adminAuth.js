@@ -104,7 +104,7 @@ export const addAdmin = async (req, res) => {
     }
 
     // check if the user is already registered email & username
-    const exist = await Admins.findOne({ email });
+    const exist = await Admin.findOne({ email });
 
     if (exist) {
       return sendResponse(res, false, "Already exists");
@@ -153,7 +153,7 @@ export const addAdmin = async (req, res) => {
     sendToken(res, user, "Register Successfully");
   } catch (error) {
     return sendError(res, error);
-    console.log("🚀 ~ addAdmin ~ error:", error);
+  
   }
 };
 
@@ -163,7 +163,6 @@ export const login = async (req, res) => {
     let { email, password } = req.body;
 
     const regexEmail = /^\S+@\S+\.\S+$/;
-    // change email to lower case
     email = email.toLowerCase();
 
     if (!regexEmail.test(email)) {
@@ -180,17 +179,11 @@ export const login = async (req, res) => {
       );
     }
 
-    // find user is exist or not
     const user = await Admins.findOne({ email }).select("+password");
-
-    // console.log(user);
-    // if not user found
     if (!user || user.isDelete) {
       return sendResponse(res, false, "User not Exist!");
     }
-    // check if password is correct
     const isMatch = await user.isMatchPassword(password);
-    //  match password
     if (!isMatch) {
       return sendResponse(res, false, "invalid email & password");
     }

@@ -9,8 +9,11 @@ import {
   getOrder,
   updateOrder,
   delSingleImage,
+  myTeam,
+  deleteAdmin,
+  editAdmin,
 } from "../controllers/admin/admin.js";
-import {isAdmin,isAuthorization} from "../../src/middleware/auth.js"
+import { isAdmin, isAuthorization } from "../../src/middleware/auth.js";
 import { profileImg } from "../middleware/storage.js";
 /**
  *  @swagger
@@ -206,7 +209,9 @@ router
  */
 
 //get Single Order
-router.route("/getOrder/:id").get(isAdmin, isAuthorization(["ADMIN", "ORDER_PICKER"]),getOrder);
+router
+  .route("/getOrder/:id")
+  .get(isAdmin, isAuthorization(["ADMIN", "ORDER_PICKER"]), getOrder);
 
 //update Order
 
@@ -241,7 +246,9 @@ router.route("/getOrder/:id").get(isAdmin, isAuthorization(["ADMIN", "ORDER_PICK
  *         description: Internal Server Error
  */
 
-router.route("/updateOrder/:id").patch(isAdmin, isAuthorization(["ADMIN", "ORDER_PICKER"]),updateOrder);
+router
+  .route("/updateOrder/:id")
+  .patch(isAdmin, isAuthorization(["ADMIN", "ORDER_PICKER"]), updateOrder);
 
 /**
  * @swagger
@@ -303,4 +310,163 @@ router
     isAuthorization(["ADMIN", "CONTENT_WRITER"]),
     delSingleImage
   );
+
+/**
+ * @swagger
+ * /admin/myTeam:
+ *   get:
+ *     summary: Retrieve a list of all team members or a single admin
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: string
+ *         description: The admin ID
+ *     responses:
+ *       200:
+ *         description: A list of all team members or a single admin
+ *       404:
+ *         description: Admin not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errorMessage:
+ *                   type: string
+ */
+router.route("/myTeam").get(isAdmin, isAuthorization(["ADMIN"]), myTeam);
+
+/**
+ * @swagger
+ * /admin/delTeamMember/{id}:
+ *   delete:
+ *     summary: Delete an admin by ID
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The admin ID
+ *     responses:
+ *       200:
+ *         description: Admin deleted
+ *       404:
+ *         description: Admin not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errorMessage:
+ *                   type: string
+ */
+router
+  .route("/delTeamMember/:id")
+  .delete(isAdmin, isAuthorization(["ADMIN"]), deleteAdmin);
+
+/**
+ * @swagger
+ * /admin/editTeamMember/{id}:
+ *   put:
+ *     summary: Edit a team member by ID
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The admin ID
+ *     description: Endpoint for editing a team member's details
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: johndoe
+ *                 description: User's username
+ *               email:
+ *                 type: string
+ *                 example: user@example.com
+ *                 description: User's email
+ *               phone:
+ *                 type: string
+ *                 example: +1234567890
+ *                 description: User's phone number
+ *               password:
+ *                 type: string
+ *                 example: Pa$$w0rd!
+ *                 description: User's password
+ *               role:
+ *                 type: string
+ *                 example: Admin
+ *                 description: User's role ["ADMIN", "CONTENT_WRITER", "ORDER_PICKER"]
+ *     responses:
+ *       200:
+ *         description: Team member edited successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 admin:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *       404:
+ *         description: Team member not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errorMessage:
+ *                   type: string
+ */
+router
+  .route("/editTeamMember/:id")
+  .put(isAdmin, isAuthorization(["ADMIN"]), editAdmin);
+
 export default router;
