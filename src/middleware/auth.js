@@ -37,10 +37,6 @@ export const isAdmin = async (req, res, next) => {
     if (req.user.accessToken != token) {
       return res.status(203).json({ message: "You must be logged in" });
     }
-    
-    if (token != req.user.accessToken){
-      return res.status(203).json({ message: "You must be logged in" });
-    }
     next();
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });

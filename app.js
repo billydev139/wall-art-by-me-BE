@@ -9,7 +9,7 @@ import bodyparser from "body-parser";
 import ErrorHandler from "./src/middleware/errorHandler.js";
 export const app = express();
 const corsOptions = {
-  origin: "http://localhost:5173", // Replace with your frontend domain
+  origin: "*", // Replace with your frontend domain
   methods: "GET, POST, PUT, DELETE,PATCH,OPTIONS,HEAD",
   allowedHeaders: ["Content-Type", "Authorization"], // Uncomment and use if needed
   credentials: true, // If you need to include credentials
