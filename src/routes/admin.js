@@ -116,9 +116,7 @@ router
  *       500:
  *         description: Internal Server Error
  */
-router
-  .route("/getArt/:id")
-  .get(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), getArtById);
+router.route("/getArt/:id").get(getArtById);
 
 /**
  * @swagger
