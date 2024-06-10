@@ -294,3 +294,42 @@ export const editAdmin = async (req, res) => {
     return res.status(500).json({ errorMessage: error.message });
   }
 };
+
+//adminRegister 
+export const adminRegister = async (req, res) => {
+  try {
+    let { username, email, phone, password, role } = req.body;
+
+    if (!username || !email || !phone || !password || !role) {
+      return res.status(203).json({ error: "All fields are required" });
+    }
+    const regexEmail = /^\S+@\S+\.\S+$/;
+    // change email to lower case
+    email = email.toLowerCase();
+
+    if (!regexEmail.test(email)) {
+      return res.status(203).json({ error: "Enter Valid E-mail" });
+    }
+    const checkEmail = await Admins.findOne({ email });
+    const checkPhone = await Admins.findOne({ phone });
+
+    if (checkEmail) {
+      return res.status(203).json({ error: "Email Already exists" });
+    }
+    if (checkPhone) {
+      return res.status(203).json({ error: "Phone Number Already exists" });
+    }
+    // user password hashing
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    password = hashPassword;
+    // Create a new user
+    const newUser = new Admins({ username, email, phone, password, role });
+    await newUser.save();
+
+    res.status(201).json({ message: `${role} Registered Successfully` });
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};

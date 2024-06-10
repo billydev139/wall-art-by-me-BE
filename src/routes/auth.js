@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { adminLogin, adminRegister, logOut } from "../controllers/auth/auth.js";
+import { adminLogin,  logOut } from "../controllers/auth/auth.js";
 import { isAdmin, isAuthorization } from "../../src/middleware/auth.js";
 /**
  * @swagger
@@ -67,77 +67,6 @@ import { isAdmin, isAuthorization } from "../../src/middleware/auth.js";
 
 router.route("/adminLogin").post(adminLogin);
 
-/**
- * @swagger
- * paths:
- *   /auth/adminRegister:
- *     post:
- *       summary: admin registration
- *       tags:
- *         - Auth
- *       description: Endpoint for admin registration
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 username:
- *                   type: string
- *                   example: johndoe
- *                   description: User's username
- *                 email:
- *                   type: string
- *                   example: user@example.com
- *                   description: User's email
- *                 phone:
- *                   type: string
- *                   example: +1234567890
- *                   description: User's phone number
- *                 password:
- *                   type: string
- *                   example: Pa$$w0rd!
- *                   description: User's password
- *                 role:
- *                   type: string
- *                   example: Admin
- *                   description: User's role user this enum value ["ADMIN", "CONTENT_WRITER", "ORDER_PICKER"]
- *       responses:
- *         '201':
- *           description: User registered successfully
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *                     example: User registered successfully
- *         '203':
- *           description: Validation error or user already exists
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   error:
- *                     type: string
- *                     example: Email Already exists
- *         '500':
- *           description: Internal server error
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   errorMessage:
- *                     type: string
- *                     example: Internal Server Error
- */
-router
-  .route("/adminRegister")
-  .post(isAdmin, isAuthorization(["ADMIN"]), adminRegister);
 
 /**
  * @swagger
