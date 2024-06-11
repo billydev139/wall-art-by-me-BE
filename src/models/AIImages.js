@@ -8,23 +8,12 @@ const artSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  imgURLs: [
+  imgURL: [
     {
       type: String,
       required: true,
     },
   ],
-  size: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-  },
-  artist: {
-    type: String,
-    required: true,
-  },
   description: {
     type: String,
     required: true,
@@ -33,7 +22,7 @@ const artSchema = mongoose.Schema({
     type: String,
     enum: ["Portrait", "Square", "Landscape"],
   },
-  isFeatured:{
+  isFeatured: {
     type: Boolean,
     default: false,
   },

@@ -95,70 +95,82 @@ export const getArtCollection = async (req, res, next) => {
 };
 
 // place order
-export const placeOrder = async (req, res) => {
-  try {
-    let subTotal = 0;
-    let quantity = 0;
-    const items = [];
-    for (const item of req.body.cartItems) {
-      const id = item.artCollection;
-      const art = await artCollection.findById(id);
-      let frameSize;
-      let size;
+// export const placeOrder = async (req, res) => {
+//   console.log("🚀 ~ placeOrder ~ req:", req.body);
+//   try {
+//     let subTotal = 0;
+//     let quantity = 0;
+//     const items = [];
+//     for (const item of req.body.cartItems) {
+//       const id = item.artCollection;
+//       const art = await artCollection.findById(id);
+//       let frameSize;
+//       let size;
 
-      if (item.posterFrameMaterial !== "NoFrame") {
-        art.posterFrame.forEach((frame) => {
-          if (frame.material === item.posterFrameMaterial) {
-            frameSize = frame.frameSize;
-            frameSize = frame.price;
-          }
-        });
-      } else {
-        frameSize = 0;
-      }
+//       if (item.posterFrameMaterial !== "NoFrame") {
+//         art.posterFrame.forEach((frame) => {
+//           if (frame.material === item.posterFrameMaterial) {
+//             frameSize = frame.frameSize;
+//             frameSize = frame.price;
+//           }
+//         });
+//       } else {
+//         frameSize = 0;
+//       }
 
-      if (item.frameOption !== "NoSize") {
-        art.frameOption.forEach((frame) => {
-          if (frame.size === item.size) {
-            size = frame.price;
-          }
-        });
-      } else {
-        size = 0;
-      }
+//       if (item.frameOption !== "NoSize") {
+//         art.frameOption.forEach((frame) => {
+//           if (frame.size === item.size) {
+//             size = frame.price;
+//           }
+//         });
+//       } else {
+//         size = 0;
+//       }
 
-      if (!art) {
-        throw new Error(
-          `ArtCollection item with ID ${item.artCollection} not found`
-        );
-      }
+//       if (!art) {
+//         throw new Error(
+//           `ArtCollection item with ID ${item.artCollection} not found`
+//         );
+//       }
 
-      subTotal +=
-        parseInt(size) * parseInt(item.quantity) + parseInt(frameSize);
-      quantity += parseInt(item.quantity);
+//       subTotal +=
+//         parseInt(size) * parseInt(item.quantity) + parseInt(frameSize);
+//       quantity += parseInt(item.quantity);
 
-      items.push({
-        ...item,
-        art,
-      });
-    }
+//       items.push({
+//         ...item,
+//         art,
+//       });
+//     }
 
-    const order = new Order({
-      ...req.body,
-      items,
-      totalPrice: subTotal,
-      quantity: quantity,
-    });
+//     const order = new Order({
+//       ...req.body,
+//       items,
+//       totalPrice: subTotal,
+//       quantity: quantity,
+//     });
 
-    await order.save();
+//     await order.save();
 
-    return res
-      .status(200)
-      .json({ message: "Order saved successfully", totalPrice: subTotal });
-  } catch (error) {
-    return res.status(500).json({ errorMessage: error.message });
-  }
-};
+//     return res
+//       .status(200)
+//       .json({ message: "Order saved successfully", totalPrice: subTotal });
+//   } catch (error) {
+//     return res.status(500).json({ ErrorMessage: error.message });
+//   }
+// };
+
+ export const placeOrder = async (req, res) => {
+ try {
+       let subTotal = 0;
+       let quantity = 0;
+       const items = [];
+       console.log(req.body)
+ } catch (error) {
+  
+ }  
+}
 
 // addTOCart
 export const addTOCart = async (req, res) => {
@@ -200,8 +212,17 @@ export const updateCart = async (req, res) => {
 
 // imageGenerator
 export const imageGenerator = async (req, res) => {
-  let { prompt, size } = req.body;
   try {
+    let { prompt, size } = req.body;
+    if (!prompt) {
+      return res.status(400).json({ errorMessage: "Prompt is required." });
+    }
+    if (prompt.length > 4000) {
+      return res.status(400).json({
+        errorMessage: "Prompt exceeds the maximum length of 4000 characters.",
+      });
+    }
+
     const openai = new OpenAI({
       apiKey: process.env.OPEN_API_KEY,
     });
@@ -228,7 +249,6 @@ export const imageGenerator = async (req, res) => {
   }
 };
 
-
 // downloadAIImage
 export const downlodeAIImage = async (req, res) => {
   let { url, filename } = req.body;
@@ -239,7 +259,7 @@ export const downlodeAIImage = async (req, res) => {
     }
 
     const downloadDir = path.join(__dirname, "../../../public/");
-    const filePath = path.resolve(downloadDir, "artCollection");
+    const filePath = path.resolve(downloadDir, "AICollection");
     const options = {
       url: url,
       dest: filePath,
@@ -254,7 +274,6 @@ export const downlodeAIImage = async (req, res) => {
           .json({ message: "Image AddToCart Successfully", url: onlyFilename });
       })
       .catch((err) => {
-       
         return res.status(500).json({ errorMessage: err.message });
       });
   } catch (error) {

@@ -13,6 +13,10 @@ import {
   deleteAdmin,
   editAdmin,
   adminRegister,
+  addFrame,
+  getFrame,
+  editFrame,
+  deleteFrame,
 } from "../controllers/admin/admin.js";
 import { isAdmin, isAuthorization } from "../../src/middleware/auth.js";
 import { profileImg } from "../middleware/storage.js";
@@ -536,8 +540,278 @@ router
  *                     type: string
  *                     example: Internal Server Error
  */
+
 router
   .route("/adminRegister")
   .post(isAdmin, isAuthorization(["ADMIN"]), adminRegister);
+
+/**
+ * @swagger
+ * paths:
+ *   /admin/addFrame:
+ *     post:
+ *       summary: Add a new frame
+ *       tags:
+ *         - Admin
+ *       description: Endpoint for adding a new frame
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 frameOption:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       price:
+ *                         type: number
+ *                         example: 100
+ *                         description: Price of the frame option
+ *                       size:
+ *                         type: string
+ *                         example: "8x10"
+ *                         description: Size of the frame option
+ *                       name:
+ *                         type: string
+ *                         example: "Classic Frame"
+ *                         description: Name of the frame option
+ *                 frameExtras:
+ *                   type: string
+ *                   example: "Mounted"
+ *                   description: Extra features for the frame
+ *                 posterFrame:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       price:
+ *                         type: number
+ *                         example: 150
+ *                         description: Price of the poster frame
+ *                       color:
+ *                         type: string
+ *                         example: "Black"
+ *                         description: Color of the poster frame
+ *                       material:
+ *                         type: string
+ *                         example: "Wood"
+ *                         description: Material of the poster frame
+ *       responses:
+ *         '200':
+ *           description: Frame Saved Successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Frame Saved Successfully
+ *         '500':
+ *           description: Internal server error
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   errorMessage:
+ *                     type: string
+ *                     example: An error occurred
+ */
+
+router
+  .route("/addFrame")
+  .post(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), addFrame);
+
+
+/**
+ * @swagger
+ * paths:
+ *   /admin/getFrame:
+ *     get:
+ *       summary: Get frame 
+ *       tags:
+ *         - Admin
+ *       description: Endpoint for retrieving a frame
+ *       responses:
+ *         '200':
+ *           description: Frame retrieved successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   frame:
+ *                     $ref: '#/components/schemas/Frame'
+ *         '404':
+ *           description: Frame not found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   errorMessage:
+ *                     type: string
+ *                     example: Frame not found
+ *         '500':
+ *           description: Internal server error
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   errorMessage:
+ *                     type: string
+ *                     example: An error occurred
+ */
+router
+  .route("/getFrame")
+  .get(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), getFrame);
+
+/**
+ * @swagger
+ * paths:
+ *   /admin/deleteFrame/{id}:
+ *     delete:
+ *       summary: Delete frame by ID
+ *       tags:
+ *         - Admin
+ *       description: Endpoint for deleting a frame by its ID
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The ID of the frame to delete
+ *       responses:
+ *         '200':
+ *           description: Frame deleted successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Frame deleted successfully
+ *         '404':
+ *           description: Frame not found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   errorMessage:
+ *                     type: string
+ *                     example: Frame not found
+ *         '500':
+ *           description: Internal server error
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   errorMessage:
+ *                     type: string
+ *                     example: An error occurred
+ */
+router
+  .route("/deleteFrame/:id")
+  .delete(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), deleteFrame);
+
+
+/**
+ * @swagger
+ * paths:
+ *   /admin/editFrame/{id}:
+ *     put:
+ *       summary: Edit frame
+ *       tags:
+ *         - Admin
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           schema:
+ *             type: string
+ *           required: true
+ *           description: The admin ID
+ *       description: Endpoint for editing a frame
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 frameOption:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       price:
+ *                         type: number
+ *                         example: 100
+ *                         description: Price of the frame option
+ *                       size:
+ *                         type: string
+ *                         example: "8x10"
+ *                         description: Size of the frame option
+ *                       name:
+ *                         type: string
+ *                         example: "Classic Frame"
+ *                         description: Name of the frame option
+ *                 frameExtras:
+ *                   type: string
+ *                   example: "Mounted"
+ *                   description: Extra features for the frame
+ *                 posterFrame:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       price:
+ *                         type: number
+ *                         example: 150
+ *                         description: Price of the poster frame
+ *                       color:
+ *                         type: string
+ *                         example: "Black"
+ *                         description: Color of the poster frame
+ *                       material:
+ *                         type: string
+ *                         example: "Wood"
+ *                         description: Material of the poster frame
+ *       responses:
+ *         '200':
+ *           description: Edit Frame Successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Edit Frame Successfully
+ *         '500':
+ *           description: Internal server error
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   errorMessage:
+ *                     type: string
+ *                     example: An error occurred
+ */
+
+router
+  .route("/editFrame/:id")
+  .put(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), editFrame);
+
+
 
 export default router;

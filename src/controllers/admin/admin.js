@@ -1,5 +1,7 @@
 import artCollection from "../../models/artCollection.js";
+import Frame from "../../models/frame.js"
 import fs from "fs";
+import bcrypt from "bcryptjs";
 import Order from "../../models/order.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -329,6 +331,72 @@ export const adminRegister = async (req, res) => {
     await newUser.save();
 
     res.status(201).json({ message: `${role} Registered Successfully` });
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+// addFrame
+export const addFrame = async (req, res) => {
+  try {
+    const newFrame = new Frame({
+      ...req.body,
+    });
+    await newFrame.save();
+    return res.status(200).json({ message: "Frame Saved Successfully" });
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+
+// getFrames
+export const getFrame = async (req, res) => {
+  try {
+    const frames = await Frame.find();
+    return res.status(200).json({ message: "All Frames", frames });
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+// editFrame
+export const editFrame = async (req, res) => {
+
+  try {
+    const frameId = req.params.id;
+    console.log("🚀 ~ editFrame ~ frameId:", frameId)
+    if (!frameId) {
+      return res.status(404).json({ message: "ID Not Found" });
+    }
+    const updates = req.body;
+    const frame = await Frame.findByIdAndUpdate(frameId, updates, {
+      new: true,
+    });
+    console.log("🚀 ~ editFrame ~ frame:", frame)
+    if (!frame) {
+      return res.status(404).json({ message: "Frame Not Found" });
+    }
+    return res.status(200).json({ message: "Frame Updated", frame });
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+// deleteFrame
+export const deleteFrame = async (req, res) => {
+  try {
+    const frameId = req.params.id;
+    if (!frameId) {
+      return res.status(404).json({ message: "ID Not Found" });
+    }
+    const frame = await Frame.findByIdAndDelete(frameId);
+    if (!frame) {
+      return res.status(404).json({ message: "Frame Not Found" });
+    }
+    return res
+      .status(200)
+      .json({ message: "Frame Deleted Successfully" });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }

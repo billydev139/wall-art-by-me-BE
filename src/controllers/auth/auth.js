@@ -1,6 +1,5 @@
 import Admins from "../../models/admin.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+
 import { sendToken } from "../../middleware/auth.js";
 
 export const adminLogin = async (req, res) => {
