@@ -276,14 +276,14 @@ export const editAdmin = async (req, res) => {
       return res.status(404).json({ message: "ID not found" });
     }
     const updates = req.body;
-    let phone = await Admins.find({ phone: req.body.phone });
-    if (phone.length > 0) {
-      return res.status(404).json({ message: "Phone number already exists" });
-    }
-    let email = await Admins.find({ email: req.body.email });
-    if (email.length > 0) {
-      return res.status(404).json({ message: "Email Already Exists" });
-    }
+    // let phone = await Admins.find({ phone: req.body.phone });
+    // if (phone.length > 0) {
+    //   return res.status(404).json({ message: "Phone number already exists" });
+    // }
+    // let email = await Admins.find({ email: req.body.email });
+    // if (email.length > 0) {
+    //   return res.status(404).json({ message: "Email Already Exists" });
+    // }
 
     const admin = await Admins.findByIdAndUpdate(adminId, updates, {
       new: true,
