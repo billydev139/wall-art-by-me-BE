@@ -16,4 +16,3 @@ let port = "7070" || process.env.PORT;
 http
   .createServer(app)
   .listen(port, () => console.log("Server listening on port: " + port));
-// console.log("Testing")

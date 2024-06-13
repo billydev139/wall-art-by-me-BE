@@ -305,4 +305,51 @@ router.route("/imageGenerator").post(imageGenerator);
 
 router.route("/downlodeAIImage").post(downlodeAIImage);
 
+/**
+ * @swagger
+ * /public/testing:
+ *   get:
+ *     summary: Get art collections
+ *     tags:
+ *       - Public
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: string
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: string
+ *         description: limit of doc you want to get
+ *       - in: query
+ *         name: color
+ *         schema:
+ *           type: string
+ *         description: Filter by color
+ *       - in: query
+ *         name: isFeatured
+ *         schema:
+ *           type: boolean
+ *         description: Filter by isFeatured
+ *       - in: query
+ *         name: orderStatus
+ *         schema:
+ *           type: string
+ *         description: Filter by order status
+ *       - in: query
+ *         name: artisticStyle
+ *         schema:
+ *           type: string
+ *         description: Filter by artistic style
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved art collections
+ *       500:
+ *         description: Internal Server Error
+ */
+
+router.route("/getArtCollection").get(getArtCollection);
+
 export default router;
