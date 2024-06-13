@@ -669,7 +669,7 @@ router
  */
 router
   .route("/getFrame")
-  .get(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), getFrame);
+  .get( getFrame);
 
 /**
  * @swagger
