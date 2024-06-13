@@ -12,7 +12,7 @@ database();
 
 // https://127.0.0.1:5100/api
 app.use("/api", swaggerServe, swaggerSetup);
-let port = "7070" || process.env.PORT;
+let port = process.env.PORT || "7070";
 http
   .createServer(app)
   .listen(port, () => console.log("Server listening on port: " + port));
