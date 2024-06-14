@@ -100,7 +100,7 @@ router.route("/getArtCollection").get(getArtCollection);
  *           example: "nigth star"
  *         frameSize:
  *           type: string
- *           example: "Large"
+ *           example: "15*15"
  *         imgURL:
  *           type: string
  *           example: "https://example.com/image.jpg"

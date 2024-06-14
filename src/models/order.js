@@ -4,8 +4,7 @@ const orderSchema = mongoose.Schema({
   cartItems: [
     {
       artCollection: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "artcollection",
+      type :String,
       },
       quantity: {
         type: Number,
@@ -15,10 +14,10 @@ const orderSchema = mongoose.Schema({
         type: String,
         required: true,
       },
-      artisticStyle: {
-        type: String,
-        required: true,
-      },
+      // artisticStyle: {
+      //   type: String,
+      //   required: true,
+      // },
       frameSize: {
         type: String,
         required: true,
@@ -27,18 +26,19 @@ const orderSchema = mongoose.Schema({
         type: String,
         required: true,
       },
-      posterFrameColor: {
-        type: String,
-        required: true,
-      },
-      frameExtras: {
-        type: String,
-        required: true,
-      },
+      // posterFrameColor: {
+      //   type: String,
+      //   required: true,
+      // },
+      // frameExtras: {
+      //   type: String,
+      //   required: true,
+      // },
       posterFrameMaterial: {
         type: String,
         required: true,
       },
+
       imgURL: {
         type: String,
         required: true,
@@ -62,8 +62,12 @@ const orderSchema = mongoose.Schema({
         type: String,
         required: true,
       },
+      totalItemPrice: {
+        type: Number,
+        required: true,
+      },
     },
-  ],
+   ],
   quantity: {
     type: Number,
     required: true,
