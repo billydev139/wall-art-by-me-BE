@@ -1,5 +1,5 @@
 import artCollection from "../../models/artCollection.js";
-import Frame from "../../models/frame.js"
+import Frame from "../../models/frame.js";
 import fs from "fs";
 import bcrypt from "bcryptjs";
 import Order from "../../models/order.js";
@@ -297,7 +297,7 @@ export const editAdmin = async (req, res) => {
   }
 };
 
-//adminRegister 
+//adminRegister
 export const adminRegister = async (req, res) => {
   try {
     let { username, email, phone, password, role } = req.body;
@@ -349,7 +349,6 @@ export const addFrame = async (req, res) => {
   }
 };
 
-
 // getFrames
 export const getFrame = async (req, res) => {
   try {
@@ -362,10 +361,9 @@ export const getFrame = async (req, res) => {
 
 // editFrame
 export const editFrame = async (req, res) => {
-
   try {
     const frameId = req.params.id;
-    console.log("🚀 ~ editFrame ~ frameId:", frameId)
+    console.log("🚀 ~ editFrame ~ frameId:", frameId);
     if (!frameId) {
       return res.status(404).json({ message: "ID Not Found" });
     }
@@ -373,7 +371,7 @@ export const editFrame = async (req, res) => {
     const frame = await Frame.findByIdAndUpdate(frameId, updates, {
       new: true,
     });
-    console.log("🚀 ~ editFrame ~ frame:", frame)
+    console.log("🚀 ~ editFrame ~ frame:", frame);
     if (!frame) {
       return res.status(404).json({ message: "Frame Not Found" });
     }
@@ -394,9 +392,7 @@ export const deleteFrame = async (req, res) => {
     if (!frame) {
       return res.status(404).json({ message: "Frame Not Found" });
     }
-    return res
-      .status(200)
-      .json({ message: "Frame Deleted Successfully" });
+    return res.status(200).json({ message: "Frame Deleted Successfully" });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }
