@@ -193,10 +193,7 @@ export const placeOrder = async (req, res) => {
           if (frame.material === item.posterFrameMaterial) {
             itemPrice = itemPrice + frame.price;
 
-            console.log(
-              "🚀 ~ frameOption.frameOption.forEach ~ itemPrice:",
-              itemPrice
-            );
+            
           }
         });
       } else {
@@ -236,10 +233,11 @@ export const placeOrder = async (req, res) => {
       totalPrice: totalOrderPrice,
       quantity: totalOrderQuantity,
       status: "Pending",
-      customerName: "John Doe",
-      customerEmail: "john@example.com",
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email:req.body.email,
+      shippingOption:req.body.shippingOption,
       shippingAddress: "123 Main St, City, Country",
-      orderStatus: "Pending",
       createdAt: new Date(),
     };
 

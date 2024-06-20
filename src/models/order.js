@@ -4,7 +4,7 @@ const orderSchema = mongoose.Schema({
   cartItems: [
     {
       artCollection: {
-      type :String,
+        type: String,
       },
       quantity: {
         type: Number,
@@ -67,7 +67,7 @@ const orderSchema = mongoose.Schema({
         required: true,
       },
     },
-   ],
+  ],
   quantity: {
     type: Number,
     required: true,
@@ -76,11 +76,15 @@ const orderSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  customerName: {
+  firstName: {
     type: String,
     required: true,
   },
-  customerEmail: {
+  lastName:{
+    type: String,
+    required: true,
+  },
+  email: {
     type: String,
     required: true,
   },
@@ -92,6 +96,11 @@ const orderSchema = mongoose.Schema({
     type: String,
     enum: ["Pending", "Shipped", "Delivered"],
     default: "Pending",
+  },
+  shippingOption: {
+    type: String,
+    enum: ['Standard', 'Expedited', 'Overnight', 'International'],
+    required: true
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
