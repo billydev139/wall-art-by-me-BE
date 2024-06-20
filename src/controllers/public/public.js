@@ -168,6 +168,7 @@ export const placeOrder = async (req, res) => {
     let totalOrderPrice = 0;
     let totalOrderQuantity = 0;
     let quantity = 0;
+    let art;
     let itemArray = [];
     const orderItems = req.body.cartItems;
 
@@ -175,8 +176,14 @@ export const placeOrder = async (req, res) => {
       let itemPrice = 0;
 
       if (item.artCollection != "") {
-        const art = await artCollection.findOne({ _id: item.artCollection });
+        art = await artCollection.findById({ _id: item.artCollection });
         console.log("Price from db", art.price);
+        // let name = art.name;
+        // let artisticStyle = art.artisticStyle;
+        // let description = art.description;
+        // let color = art.color;
+        // let artist = art.artist;
+        // let imgURLs = art.imgURLs;
         itemPrice = itemPrice + art.price;
       } else {
         itemPrice = itemPrice + 10;
@@ -192,8 +199,6 @@ export const placeOrder = async (req, res) => {
         frameOption.posterFrame.forEach((frame) => {
           if (frame.material === item.posterFrameMaterial) {
             itemPrice = itemPrice + frame.price;
-
-            
           }
         });
       } else {
@@ -209,10 +214,18 @@ export const placeOrder = async (req, res) => {
       } else {
         size = 0;
       }
+
       let artItem = {
+        name: art ? art.name : "AI Art",
+        artisticStyle: art ? art.artisticStyle : "",
+        description: art ? art.description : item.description,
+        color: art ? art.color : "",
+        artist: art ? art.artist : "",
+        imgURL: art && art.imgURLs ? art.imgURLs[0] : item.imgURL,
         ...item,
         totalItemPrice: itemPrice,
       };
+
       itemArray.push(artItem);
       totalOrderPrice = totalOrderPrice + itemPrice;
       totalOrderQuantity = totalOrderQuantity + item.quantity;
@@ -235,8 +248,8 @@ export const placeOrder = async (req, res) => {
       status: "Pending",
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      email:req.body.email,
-      shippingOption:req.body.shippingOption,
+      email: req.body.email,
+      shippingOption: req.body.shippingOption,
       shippingAddress: "123 Main St, City, Country",
       createdAt: new Date(),
     };

@@ -12,12 +12,12 @@ const orderSchema = mongoose.Schema({
       },
       name: {
         type: String,
-        required: true,
+       
       },
-      // artisticStyle: {
-      //   type: String,
-      //   required: true,
-      // },
+      artisticStyle: {
+        type: String,
+       
+      },
       frameSize: {
         type: String,
         required: true,
@@ -48,15 +48,15 @@ const orderSchema = mongoose.Schema({
       },
       artist: {
         type: String,
-        required: true,
+
       },
       description: {
         type: String,
-        required: true,
+
       },
       orientation: {
         type: String,
-        enum: ["portrait", "square", "Landscape"],
+        enum: ["Portrait", "Square", "Landscape"],
       },
       specification: {
         type: String,
