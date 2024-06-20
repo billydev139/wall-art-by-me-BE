@@ -165,7 +165,7 @@ export const getArtCollection = async (req, res, next) => {
 export const placeOrder = async (req, res) => {
   try {
     let subTotal = 0;
-    let totalOrderPrice=0; 
+    let totalOrderPrice = 0;
     let totalOrderQuantity = 0;
     let quantity = 0;
     let itemArray = [];
@@ -173,25 +173,16 @@ export const placeOrder = async (req, res) => {
 
     for (const item of orderItems) {
       let itemPrice = 0;
-     
 
-      if(item.artCollection!=""){
+      if (item.artCollection != "") {
         const art = await artCollection.findOne({ _id: item.artCollection });
-         console.log("Price from db", art.price);
-         itemPrice = itemPrice + art.price;
-      }else{
+        console.log("Price from db", art.price);
+        itemPrice = itemPrice + art.price;
+      } else {
         itemPrice = itemPrice + 10;
       }
-      
-      //console.log("🚀 ~ placeOrder ~ art:", art);
-      // if (art.length > 0) {
-      //   if (!art) {
-      //     return res.status(404).json({ message: "Art item not found" });
-      //   }
-      // }
-      //console.log("🚀 ~ placeOrder ~ art:", art)
+
       let frameOption = await Frame.findOne();
-      //console.log("🚀 ~ placeOrder ~ frameOption:", frameOption)
       console.log("Price from db", itemPrice);
       let framePriceMaterial;
       let frameSizePrice;
@@ -199,9 +190,6 @@ export const placeOrder = async (req, res) => {
 
       if (item.posterFrameMaterial != "NoMaterial") {
         frameOption.posterFrame.forEach((frame) => {
-          //console.log("🚀 ~ frameOption.frameOption.forEach ~ frame:", frame);
-          //console.log("the material ", frame.material);
-         // console.log("the material from cart", item.posterFrameMaterial);
           if (frame.material === item.posterFrameMaterial) {
             itemPrice = itemPrice + frame.price;
 
@@ -217,15 +205,8 @@ export const placeOrder = async (req, res) => {
 
       if (item.frameName !== "NoFrame") {
         frameOption.frameOption.forEach((frame) => {
-          console.log("🚀 ~ frameOption.posterFrame.forEach ~ frame:", frame);
-          console.log("the material ", frame.name);
-          console.log("the material from cart", item.frameName);
           if (frame.name === item.frameName) {
             itemPrice = itemPrice + frame.price;
-            console.log(
-              "🚀 ~ frameOption.posterFrame.forEach ~ itemPrice:",
-              itemPrice
-            );
           }
         });
       } else {
@@ -233,25 +214,12 @@ export const placeOrder = async (req, res) => {
       }
       let artItem = {
         ...item,
-        totalItemPrice: itemPrice
+        totalItemPrice: itemPrice,
       };
       itemArray.push(artItem);
-      console.log("item.quantity ", item.quantity);
       totalOrderPrice = totalOrderPrice + itemPrice;
       totalOrderQuantity = totalOrderQuantity + item.quantity;
-      console.log("🚀 ~ placeOrder ~ totalOrderQuantity:", totalOrderQuantity)
-      totalOrderQuantity = parseInt(totalOrderQuantity)
-      // if (!art) {
-      //   return res.status(404).json({ message: "Art item not found" });
-      // }
-
-      // subTotal += parseInt(art.price) * parseInt(item.quantity);
-      // let orderItem = item;
-      // orderItem.price = art.price;
-      //console.log(orderItem);
-      //console.log("🚀 ~ placeOrder ~ subTotal:", subTotal);
-      //quantity += parseInt(item.quantity);
-      // console.log("🚀 ~ placeOrder ~ quantity:", quantity);
+      totalOrderQuantity = parseInt(totalOrderQuantity);
     }
 
     const items = orderItems.map((item) => ({
@@ -279,7 +247,7 @@ export const placeOrder = async (req, res) => {
     const newOrder = await Order.create(order);
 
     // Return the created order
-    return res.status(201).json(newOrder);
+    return res.status(200).json({ message: "Order Placed Successfully" });
   } catch (error) {
     console.error("Error in placeOrder:", error);
     return res.status(500).json({ message: error.message });
