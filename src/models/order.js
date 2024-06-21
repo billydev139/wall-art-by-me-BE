@@ -12,11 +12,9 @@ const orderSchema = mongoose.Schema({
       },
       name: {
         type: String,
-       
       },
       artisticStyle: {
         type: String,
-       
       },
       frameSize: {
         type: String,
@@ -48,11 +46,9 @@ const orderSchema = mongoose.Schema({
       },
       artist: {
         type: String,
-
       },
       description: {
         type: String,
-
       },
       orientation: {
         type: String,
@@ -60,7 +56,6 @@ const orderSchema = mongoose.Schema({
       },
       specification: {
         type: String,
-        required: true,
       },
       totalItemPrice: {
         type: Number,
@@ -80,7 +75,7 @@ const orderSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  lastName:{
+  lastName: {
     type: String,
     required: true,
   },
@@ -99,8 +94,8 @@ const orderSchema = mongoose.Schema({
   },
   shippingOption: {
     type: String,
-    enum: ['Standard', 'Expedited', 'Overnight', 'International'],
-    required: true
+    enum: ["Standard", "Expedited", "Overnight", "International"],
+    required: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
