@@ -131,7 +131,7 @@ router
 /**
  * @swagger
  * /admin/updateArtById/{id}:
- *   post:
+ *   patch:
  *     summary: Update Art By Id
  *     tags: [Admin]
  *     parameters:
@@ -177,7 +177,7 @@ router
 
 router
   .route("/updateArtById/:id")
-  .post(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), updateArtById);
+  .patch(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), updateArtById);
 
 /**
  * @swagger
