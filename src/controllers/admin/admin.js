@@ -50,6 +50,7 @@ export const updateArtById = async (req, res) => {
     imgURLs = art.imgURLs;
     const updatedData = {
       ...art.toObject(),
+      imgURLs,
       ...data,
     };
 

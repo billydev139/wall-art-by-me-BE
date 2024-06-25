@@ -128,10 +128,56 @@ router.route("/getArt/:id").get(getArtById);
 router
   .route("/deleteArt/:id")
   .delete(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), deleteArtById);
+/**
+ * @swagger
+ * /admin/updateArtById/{id}:
+ *   post:
+ *     summary: Update Art By Id
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The art ID to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               artisticStyle:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               size:
+ *                 type: string
+ *               color:
+ *                 type: string
+ *               artist:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               orientation:
+ *                 type: string
+ *                 enum:
+ *                   - Portrait
+ *                   - Square
+ *                   - Landscape
+ *     responses:
+ *       200:
+ *         description: Art updated successfully
+ *       500:
+ *         description: Internal Server Error
+ */
 
 router
   .route("/updateArtById/:id")
-  .patch(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), updateArtById);
+  .post(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), updateArtById);
 
 /**
  * @swagger
