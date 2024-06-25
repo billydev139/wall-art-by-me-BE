@@ -178,6 +178,49 @@ router
     updateArtImages
   );
 
+// Delet Art Images API
+
+/**
+ * @swagger
+ * /admin/delSingleImage/{id}:
+ *   post:
+ *     summary: del art images by ID
+ *     tags:
+ *       - Admin
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the art
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               imageName:
+ *                 type: string
+ *             description: Art images del
+ *     responses:
+ *       '200':
+ *         description: Art Images Deleted successfully
+ *       '404':
+ *         description: Art not found
+ *       '500':
+ *         description: Internal Server Error
+ */
+
+router
+  .route("/delSingleImage/:id")
+  .delete(
+    isAdmin,
+    isAuthorization(["ADMIN", "CONTENT_WRITER"]),
+    delSingleImage
+  );
+
 // get orders
 /**
  * @swagger
@@ -277,7 +320,7 @@ router
 /**
  * @swagger
  * paths:
- *   /admin/delSingleImage/{id}/{image}:
+ *   /admin/delSingleImage/{id}/{imageName}:
  *     delete:
  *       summary: Delete a single image from the art collection
  *       tags: [Admin]
@@ -289,7 +332,7 @@ router
  *           schema:
  *             type: string
  *           description: The ID of the art piece.
- *         - name: image
+ *         - name: imageName
  *           in: path
  *           required: true
  *           schema:
@@ -328,7 +371,7 @@ router
  *                     example: Internal server error message
  */
 router
-  .route("/delSingleImage/:id/:image")
+  .route("/delSingleImage/:id/:imageName")
   .delete(
     isAdmin,
     isAuthorization(["ADMIN", "CONTENT_WRITER"]),

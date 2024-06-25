@@ -48,8 +48,7 @@ export const updateArtById = async (req, res) => {
     }
     let imgURLs = [];
 
-      imgURLs = art.imgURLs
-
+    imgURLs = art.imgURLs;
 
     req.files.forEach((element) => {
       imgURLs.push(element.filename);
@@ -74,7 +73,6 @@ export const updateArtById = async (req, res) => {
   }
 };
 
-
 export const updateArtImages = async (req, res) => {
   try {
     const { id } = req.params;
@@ -83,17 +81,17 @@ export const updateArtImages = async (req, res) => {
     if (!art) {
       return res.status(404).json({ message: "Art not found" });
     }
-   if(req.files.length===0){ 
-     return res.status(400).json({ message: "Image Not Found" });
-   }
-   let imgURLs =[]
-    imgURLs= art.imgURLs;
- 
-   req.files.forEach((element) => {
-   imgURLs.push(element.filename);
-   });
+    if (req.files.length === 0) {
+      return res.status(400).json({ message: "Image Not Found" });
+    }
+    let imgURLs = [];
+    imgURLs = art.imgURLs;
 
-   const updatedData = {
+    req.files.forEach((element) => {
+      imgURLs.push(element.filename);
+    });
+
+    const updatedData = {
       ...art.toObject(),
     };
 
@@ -108,7 +106,6 @@ export const updateArtImages = async (req, res) => {
     return res.status(500).json({ errorMessage: error.message });
   }
 };
-
 
 // Delete Art Collection
 export const deleteArtById = async (req, res) => {
@@ -229,26 +226,26 @@ export const updateOrder = async (req, res) => {
 
 export const delSingleImage = async (req, res) => {
   try {
-    const { id, image } = req.params;
+    const { id, imageName } = req.params;
 
     let art = await artCollection.findById(id);
     let imageArray = art.imgURLs;
 
-    if (!imageArray.includes(image)) {
+    if (!imageArray.includes(imageName)) {
       return res.status(404).json({ message: "Image not found" });
     }
     if (!art) {
       return res.status(404).json({ message: "Art not found" });
     }
     let imgURLs = art.imgURLs;
-    let imagePath = `${publicPath}/${image}`;
+    let imagePath = `${publicPath}/${imageName}`;
     fs.unlink(imagePath, (err) => {
       if (err) {
         return res.status(404).json({ message: err.message });
       }
     });
 
-    let index = imgURLs.indexOf(image);
+    let index = imgURLs.indexOf(imageName);
 
     if (index > -1) {
       imgURLs.splice(index, 1);
