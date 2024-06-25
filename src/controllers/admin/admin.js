@@ -47,16 +47,10 @@ export const updateArtById = async (req, res) => {
       return res.status(404).json({ message: "Art not found" });
     }
     let imgURLs = [];
-
     imgURLs = art.imgURLs;
-
-    req.files.forEach((element) => {
-      imgURLs.push(element.filename);
-    });
     const updatedData = {
       ...art.toObject(),
       ...data,
-      imgURLs: imgURLs,
     };
 
     Object.assign(art, updatedData);
