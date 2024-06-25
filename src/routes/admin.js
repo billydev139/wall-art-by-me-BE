@@ -182,7 +182,7 @@ router
 /**
  * @swagger
  * /admin/updateArtImages/{id}:
- *   post:
+ *   patch:
  *     summary: Update art images by ID
  *     tags:
  *       - Admin
@@ -217,7 +217,7 @@ router
 
 router
   .route("/updateArtImages/:id")
-  .post(
+  .patch(
     isAdmin,
     isAuthorization(["ADMIN", "CONTENT_WRITER"]),
     profileImg,
