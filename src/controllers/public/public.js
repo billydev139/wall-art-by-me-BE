@@ -95,72 +95,6 @@ export const getArtCollection = async (req, res, next) => {
   }
 };
 
-// place order
-// export const placeOrder = async (req, res) => {
-//   console.log("🚀 ~ placeOrder ~ req:", req.body);
-//   try {
-//     let subTotal = 0;
-//     let quantity = 0;
-//     const items = [];
-//     for (const item of req.body.cartItems) {
-//       const id = item.artCollection;
-//       const art = await artCollection.findById(id);
-//       let frameSize;
-//       let size;
-
-//       if (item.posterFrameMaterial !== "NoFrame") {
-//         art.posterFrame.forEach((frame) => {
-//           if (frame.material === item.posterFrameMaterial) {
-//             frameSize = frame.frameSize;
-//             frameSize = frame.price;
-//           }
-//         });
-//       } else {
-//         frameSize = 0;
-//       }
-
-//       if (item.frameOption !== "NoSize") {
-//         art.frameOption.forEach((frame) => {
-//           if (frame.size === item.size) {
-//             size = frame.price;
-//           }
-//         });
-//       } else {
-//         size = 0;
-//       }
-
-//       if (!art) {
-//         throw new Error(
-//           `ArtCollection item with ID ${item.artCollection} not found`
-//         );
-//       }
-
-//       subTotal +=
-//         parseInt(size) * parseInt(item.quantity) + parseInt(frameSize);
-//       quantity += parseInt(item.quantity);
-
-//       items.push({
-//         ...item,
-//         art,
-//       });
-//     }
-
-//     const order = new Order({
-//       ...req.body,
-//       items,
-//       totalPrice: subTotal,
-//       quantity: quantity,
-//     });
-
-//     await order.save();
-
-//     return res
-//       .status(200)
-//       .json({ message: "Order saved successfully", totalPrice: subTotal });
-//   } catch (error) {
-//     return res.status(500).json({ ErrorMessage: error.message });
-//   }
-// };
 
 export const placeOrder = async (req, res) => {
   try {
@@ -177,20 +111,15 @@ export const placeOrder = async (req, res) => {
 
       if (item.artCollection != "") {
         art = await artCollection.findById({ _id: item.artCollection });
-        console.log("Price from db", art.price);
-        // let name = art.name;
-        // let artisticStyle = art.artisticStyle;
-        // let description = art.description;
-        // let color = art.color;
-        // let artist = art.artist;
-        // let imgURLs = art.imgURLs;
+        
+     
         itemPrice = itemPrice + art.price;
       } else {
         itemPrice = itemPrice + 10;
       }
 
       let frameOption = await Frame.findOne();
-      console.log("Price from db", itemPrice);
+
       let framePriceMaterial;
       let frameSizePrice;
       let size;

@@ -65,104 +65,79 @@ router.route("/getArtCollection").get(getArtCollection);
 
 /**
 * @swagger
- * /public/placeOrder:
- * paths:
- *   /public/placeOrder:
- *     post:
- *       summary: Create a new order
- *       tags: [Public]
- *       requestBody:
- *         description: Order details
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Order'
- *       responses:
- *         '201':
- *           description: Order created successfully
- *         '400':
-*           description: Invalid input
-* components:
-*   schemas:
-*     Order:
-*       type: object
-*       properties:
-*         cartItems:
-*           type: array
-*           items:
+* /public/placeOrder:
+*   post:
+*     summary: Submit an order
+*     tags:
+*       - Public
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
 *             type: object
 *             properties:
-*               artCollection:
+*               cartItems:
+*                 type: array
+*                 items:
+*                   type: object
+*                   properties:
+*                     frameSize:
+*                       type: string
+*                     posterFrameMaterial:
+*                       type: string
+*                     frameName:
+*                       type: string
+*                     quantity:
+*                       type: integer
+*                     size:
+*                       type: string
+*                     orientation:
+*                       type: string
+*                     specification:
+*                       type: string
+*                     artCollection:
+*                       type: string
+*                     frameExtras:
+*                       type: string
+*                     imgURL:
+*                       type: string
+*               firstName:
 *                 type: string
-*               quantity:
-*                 type: integer
-*                 required: true
-*               name:
+*               lastName:
 *                 type: string
-*                 required: true
-*               frameSize:
+*               customerName:
 *                 type: string
-*                 required: true
-*               frameName:
+*               email:
 *                 type: string
-*                 required: true
-*               posterFrameMaterial:
+*               shippingAddress:
 *                 type: string
-*                 required: true
-*               imgURL:
+*               shippingOption:
 *                 type: string
-*                 required: true
-*               color:
-*                 type: string
-*               artist:
-*                 type: string
-*                 required: true
-*               description:
-*                 type: string
-*                 required: true
-*               orientation:
-*                 type: string
-*                 enum:
-*                   - portrait
-*                   - square
-*                   - Landscape
-*               specification:
-*                 type: string
-*                 required: true
-*               totalItemPrice:
-*                 type: number
-*                 required: true
-*         quantity:
-*           type: integer
-*           required: true
-*         totalPrice:
-*           type: number
-*           required: true
-*         customerName:
-*           type: string
-*           required: true
-*         customerEmail:
-*           type: string
-*           required: true
-*         shippingAddress:
-*           type: string
-*           required: true
-*         orderStatus:
-*           type: string
-*           enum:
-*             - Pending
-*             - Shipped
-*             - Delivered
-*           default: Pending
-*         userId:
-*           type: string
-*           format: uuid
-*         createdAt:
-*           type: string
-*           format: date-time
-*           default: now
+*           example:
+*             cartItems:
+*               - frameSize: "15*15"
+*                 posterFrameMaterial: "Steel"
+*                 frameName: "A5"
+*                 quantity: 1
+*                 size: "24x36"
+*                 orientation: "Portrait"
+*                 specification: "I need this image like Ashan sleep on 4pi"
+*                 artCollection: "667926bb021d572b7f050a25"
+*                 frameExtras: ""
+*             firstName: "John"
+*             lastName: "Doe"
+*             customerName: "John Doe"
+*             email: "john.doe@example.com"
+*             shippingAddress: "123 Shipping St, Shipping City"
+*             shippingOption: "Standard"
+*     responses:
+*       '200':
+*         description: Order submitted successfully
+*       '400':
+*         description: Bad request, invalid data provided
 */
+
 router.route("/placeOrder").post(placeOrder);
 
 /**

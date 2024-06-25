@@ -41,16 +41,15 @@ export const updateArtById = async (req, res) => {
   try {
     const { id } = req.params;
     const data = req.body;
-
     // Find the art by ID
     let art = await artCollection.findById(id);
     if (!art) {
       return res.status(404).json({ message: "Art not found" });
     }
     let imgURLs = [];
-    //if (!req.files || req.files.length === 0) {
+
       imgURLs = art.imgURLs
-    //}
+
 
     req.files.forEach((element) => {
       imgURLs.push(element.filename);
@@ -74,6 +73,42 @@ export const updateArtById = async (req, res) => {
     return res.status(500).json({ errorMessage: error.message });
   }
 };
+
+
+export const updateArtImages = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Find the art by ID
+    let art = await artCollection.findById(id);
+    if (!art) {
+      return res.status(404).json({ message: "Art not found" });
+    }
+   if(req.files.length===0){ 
+     return res.status(400).json({ message: "Image Not Found" });
+   }
+   let imgURLs =[]
+    imgURLs= art.imgURLs;
+ 
+   req.files.forEach((element) => {
+   imgURLs.push(element.filename);
+   });
+
+   const updatedData = {
+      ...art.toObject(),
+    };
+
+    Object.assign(art, updatedData);
+    const updatedArt = await art.save();
+
+    // Return the updated art piece
+    return res
+      .status(200)
+      .json({ message: "Art updated successfully", updatedArt });
+  } catch (error) {
+    return res.status(500).json({ errorMessage: error.message });
+  }
+};
+
 
 // Delete Art Collection
 export const deleteArtById = async (req, res) => {

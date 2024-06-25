@@ -5,6 +5,7 @@ import {
   deleteArtById,
   getArtById,
   updateArtById,
+  updateArtImages,
   getOrders,
   getOrder,
   updateOrder,
@@ -130,11 +131,51 @@ router
 
 router
   .route("/updateArtById/:id")
-  .patch(
+  .patch(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), updateArtById);
+
+/**
+ * @swagger
+ * /admin/updateArtImages/{id}:
+ *   post:
+ *     summary: Update art images by ID
+ *     tags:
+ *       - Admin
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the art
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *             description: Art images to upload
+ *     responses:
+ *       '200':
+ *         description: Art images updated successfully
+ *       '404':
+ *         description: Art not found
+ *       '500':
+ *         description: Internal Server Error
+ */
+
+router
+  .route("/updateArtImages/:id")
+  .post(
     isAdmin,
     isAuthorization(["ADMIN", "CONTENT_WRITER"]),
     profileImg,
-    updateArtById
+    updateArtImages
   );
 
 // get orders
@@ -606,13 +647,12 @@ router
   .route("/addFrame")
   .post(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), addFrame);
 
-
 /**
  * @swagger
  * paths:
  *   /admin/getFrame:
  *     get:
- *       summary: Get frame 
+ *       summary: Get frame
  *       tags:
  *         - Admin
  *       description: Endpoint for retrieving a frame
@@ -647,9 +687,7 @@ router
  *                     type: string
  *                     example: An error occurred
  */
-router
-  .route("/getFrame")
-  .get( getFrame);
+router.route("/getFrame").get(getFrame);
 
 /**
  * @swagger
@@ -702,7 +740,6 @@ router
 router
   .route("/deleteFrame/:id")
   .delete(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), deleteFrame);
-
 
 /**
  * @swagger
@@ -792,7 +829,4 @@ router
   .route("/editFrame/:id")
   .put(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), editFrame);
 
-
-
 export default router;
-   
