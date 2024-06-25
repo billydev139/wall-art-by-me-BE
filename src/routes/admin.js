@@ -45,8 +45,10 @@ import { profileImg } from "../middleware/storage.js";
  *               artisticStyle:
  *                 type: string
  *               image:
- *                 type: string
- *                 format: binary
+ *                    type: array
+ *                    items:
+ *                      type: string
+ *                      format: binary
  *               price:
  *                 type: number
  *               size:
@@ -61,28 +63,6 @@ import { profileImg } from "../middleware/storage.js";
  *                   - Portrait
  *                   - Square
  *                   - Landscape
- *               frameOption:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     price:
- *                       type: number
- *                     size:
- *                       type: string
- *                     name:
- *                       type: string
- *               posterFrame:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     price:
- *                       type: number
- *                     color:
- *                       type: string
- *                     material:
- *                       type: string
  *     responses:
  *       200:
  *         description: Art added successfully

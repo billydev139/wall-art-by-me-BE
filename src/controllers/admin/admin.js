@@ -47,11 +47,11 @@ export const updateArtById = async (req, res) => {
     if (!art) {
       return res.status(404).json({ message: "Art not found" });
     }
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: "Image Not Found" });
-    }
-
     let imgURLs = [];
+    //if (!req.files || req.files.length === 0) {
+      imgURLs = art.imgURLs
+    //}
+
     req.files.forEach((element) => {
       imgURLs.push(element.filename);
     });
@@ -280,14 +280,6 @@ export const editAdmin = async (req, res) => {
       return res.status(404).json({ message: "ID not found" });
     }
     const updates = req.body;
-    // let phone = await Admins.find({ phone: req.body.phone });
-    // if (phone.length > 0) {
-    //   return res.status(404).json({ message: "Phone number already exists" });
-    // }
-    // let email = await Admins.find({ email: req.body.email });
-    // if (email.length > 0) {
-    //   return res.status(404).json({ message: "Email Already Exists" });
-    // }
 
     const admin = await Admins.findByIdAndUpdate(adminId, updates, {
       new: true,

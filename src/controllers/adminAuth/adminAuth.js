@@ -132,7 +132,7 @@ export const addAdmin = async (req, res) => {
     //   to: '+923000060018',
     // })
 
-    const user = new Admins(data);
+    const user = new Admin(data);
 
     const meetingData = {
       managerId: user._id,
