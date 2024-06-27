@@ -179,7 +179,7 @@ export const placeOrder = async (req, res) => {
       lastName: req.body.lastName,
       email: req.body.email,
       shippingOption: req.body.shippingOption,
-      shippingAddress: "123 Main St, City, Country",
+      shippingAddress: req.body.shippingAddress,
       createdAt: new Date(),
     };
 

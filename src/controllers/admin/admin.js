@@ -249,6 +249,8 @@ export const delSingleImage = async (req, res) => {
     await art.save();
     return res.status(200).json({ message: "Image Deleted Successfully" });
   } catch (error) {
+    console.log("🚀 ~ delSingleImage ~ error:", error)
+    
     return res.status(500).json({ errorMessage: error.message });
   }
 };

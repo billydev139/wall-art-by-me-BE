@@ -261,11 +261,7 @@ router
 
 router
   .route("/delSingleImage/:id")
-  .delete(
-    isAdmin,
-    isAuthorization(["ADMIN", "CONTENT_WRITER"]),
-    delSingleImage
-  );
+  .post(isAdmin, isAuthorization(["ADMIN", "CONTENT_WRITER"]), delSingleImage);
 
 // get orders
 /**
